@@ -1,60 +1,88 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Exterior Virtual Tour</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Exterior Virtual Tour</title>
 
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css" />
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+<style>
+body{margin:0; overflow:hidden; font-family:'Poppins',sans-serif;}
+.topbar{
+  position:fixed; top:0; left:0; right:0; height:56px;
+  background:#8B0000; color:#fff; display:flex; align-items:center; justify-content:center; z-index:10;
+  font-weight:600;
+}
+#scene-canvas{position:absolute; top:56px; left:0; right:0; bottom:0; z-index:0;}
+#btn-back{
+  position:fixed; top:66px; left:16px; z-index:20; padding:10px 18px; border-radius:12px;
+  background:linear-gradient(135deg,#8B0000,#B01010); color:#fff; border:none; cursor:pointer;
+  font-weight:600;
+}
+</style>
 
-  <script src="https://unpkg.com/three@0.156.1/build/three.min.js"></script>
-  <script src="https://unpkg.com/three@0.156.1/examples/js/controls/OrbitControls.js"></script>
+<script src="https://unpkg.com/three@0.156.1/build/three.min.js"></script>
+<script src="https://unpkg.com/three@0.156.1/examples/js/controls/OrbitControls.js"></script>
 </head>
 <body>
-  <header class="topbar"><div class="topbar__title">Exterior</div></header>
-  <div id="scene-canvas" style="position:absolute;inset:56px 0 0 0;"></div>
-  <button id="btn-back" class="btn btn-primary" style="position:fixed;top:66px;left:16px;z-index:10;">Kembali</button>
+<div class="topbar">Exterior</div>
+<div id="scene-canvas"></div>
+<button id="btn-back">Kembali</button>
 
-  <script>
-    const canvasWrap = document.getElementById('scene-canvas');
-    const btnBack = document.getElementById('btn-back');
+<script>
+document.addEventListener('DOMContentLoaded', () => {
 
-    // Three.js scene
-    let scene = new THREE.Scene();
-    let camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight,0.1,1000);
-    let renderer = new THREE.WebGLRenderer({antialias:true});
-    renderer.setSize(window.innerWidth,window.innerHeight);
-    canvasWrap.appendChild(renderer.domElement);
+  const canvasWrap = document.getElementById('scene-canvas');
+  const btnBack = document.getElementById('btn-back');
 
-    const controls = new THREE.OrbitControls(camera,renderer.domElement);
-    controls.enableZoom = false;
-    controls.enablePan = false;
+  // Scene + camera
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 2000);
+  camera.position.set(0,0,0.1);
 
-    // Sphere geometry untuk photo sphere
-    const geometry = new THREE.SphereGeometry(500,60,40);
-    geometry.scale(-1,1,1); // balik normal
-    const texture = new THREE.TextureLoader().load('assets/photos/exterior/PXL_20250906_031158762.PHOTOSPHERE.jpg');
-    const material = new THREE.MeshBasicMaterial({map:texture});
-    const sphere = new THREE.Mesh(geometry,material);
-    scene.add(sphere);
+  // Renderer
+  const renderer = new THREE.WebGLRenderer({antialias:true});
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  canvasWrap.appendChild(renderer.domElement);
 
-    camera.position.set(0,0,0.1);
+  // Controls
+  const controls = new THREE.OrbitControls(camera, renderer.domElement);
+  controls.enableZoom = false;
+  controls.enablePan = false;
 
-    function animate(){
-      requestAnimationFrame(animate);
-      controls.update();
-      renderer.render(scene,camera);
-    }
-    animate();
+  // Sphere
+  const geometry = new THREE.SphereGeometry(500, 60, 40);
+  geometry.scale(-1,1,1); // invert normals
 
-    window.addEventListener('resize',()=>{
-      camera.aspect = window.innerWidth/window.innerHeight;
-      camera.updateProjectionMatrix();
-      renderer.setSize(window.innerWidth,window.innerHeight);
-    });
+  const loader = new THREE.TextureLoader();
+  loader.load('assets/photos/exterior/PXL_20250906_031158762.PHOTOSPHERE.jpg',
+    function(texture){
+      const material = new THREE.MeshBasicMaterial({map: texture});
+      const sphere = new THREE.Mesh(geometry, material);
+      scene.add(sphere);
+      animate();
+    },
+    undefined,
+    function(err){ console.error('Gagal load texture', err); }
+  );
 
-    btnBack.addEventListener('click',()=>{ window.location.href='index.html'; });
-  </script>
+  function animate(){
+    requestAnimationFrame(animate);
+    controls.update();
+    renderer.render(scene,camera);
+  }
+
+  window.addEventListener('resize', ()=>{
+    camera.aspect = window.innerWidth/window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+  });
+
+  btnBack.addEventListener('click', ()=>{
+    window.location.href='index.html';
+  });
+
+});
+</script>
 </body>
 </html>

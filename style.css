@@ -1,181 +1,75 @@
-/* Reset */
-body, html {
-  margin: 0;
-  padding: 0;
-  font-family: 'Roboto', sans-serif;
-  height: 100%;
-  width: 100%;
-  background-color: #f5f5f5;
-}
+/* Reset & font */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body, html { font-family: 'Roboto', sans-serif; width: 100%; height: 100%; }
 
 /* Top Bar */
 #top-bar {
-  width: 100%;
-  height: 60px;
-  background-color: #8B0000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: fixed;
-  top: 0;
-  left: 0;
+  position: fixed; top:0; left:0; width:100%; height:60px;
+  background-color: #8B0000; display:flex; justify-content:center; align-items:center;
   z-index: 10;
 }
+#top-bar h1 { color:white; font-size:24px; font-weight:700; }
 
-#top-bar h1 {
-  color: white;
-  font-size: 24px;
-  margin: 0;
-  font-weight: 700;
-}
-
-/* Landing Page Fullscreen dibawah bar */
+/* Landing Page */
 #landing {
-  position: relative;
-  width: 100vw;
-  height: calc(100vh - 60px);
-  margin-top: 60px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden;
+  position: relative; width: 100vw; height: calc(100vh - 60px); margin-top:60px;
+  display: flex; justify-content:center; align-items:center; overflow:hidden;
 }
-
-/* Background image responsif + overlay */
 #landing::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  content:""; position:absolute; top:0; left:0; width:100%; height:100%;
   background: url('assets/telkombuilding.png') no-repeat center center;
-  background-size: cover;
-  z-index: 1;
-  filter: blur(2px);
-  opacity: 0.5;
+  background-size: cover; filter: blur(2px); opacity:0.5; z-index:1;
 }
+#building-container { position: relative; z-index:2; text-align:center; width:90%; max-width:700px; }
 
-/* Konten di atas overlay */
-#building-container {
-  position: relative;
-  z-index: 2;
-  text-align: center;
-  width: 90%;
-  max-width: 700px;
-}
-
-/* Deskripsi Card */
+/* Deskripsi Card Modern */
 .desc-card {
-  background: rgba(255, 255, 255, 0.25);
-  backdrop-filter: blur(10px);
-  border-radius: 20px;
-  padding: 30px 25px;
-  box-shadow: 0 15px 30px rgba(0,0,0,0.2);
-  color: #111;
-  animation: fadeInUp 1s ease forwards;
+  background: rgba(255,255,255,0.25); backdrop-filter: blur(10px);
+  border-radius: 20px; padding:30px 25px; box-shadow:0 15px 30px rgba(0,0,0,0.2);
+  color:#111; animation: fadeInUp 1s ease forwards;
 }
-
-/* Heading */
-.desc-card h2 {
-  margin-top: 0;
-  font-size: 28px;
-  color: #8B0000;
-  margin-bottom: 15px;
-  font-weight: 700;
-}
-
-/* Paragraph */
-.desc-card p {
-  font-size: 17px;
-  line-height: 1.6;
-  margin-bottom: 25px;
-}
-
-/* Tombol */
+.desc-card h2 { font-size:28px; margin-bottom:15px; color:#8B0000; font-weight:700; }
+.desc-card p { font-size:17px; line-height:1.6; margin-bottom:25px; }
 .desc-card button {
-  padding: 14px 36px;
-  font-size: 17px;
-  border: none;
-  border-radius: 50px;
-  background: linear-gradient(135deg, #ff5252, #ff1744);
-  color: white;
-  cursor: pointer;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.25);
-  transition: all 0.3s ease;
+  padding:14px 36px; font-size:17px; border:none; border-radius:50px;
+  background: linear-gradient(135deg,#ff5252,#ff1744); color:white; cursor:pointer;
+  box-shadow:0 8px 20px rgba(0,0,0,0.25); transition: all 0.3s ease;
 }
+.desc-card button:hover { transform: translateY(-5px) scale(1.05); box-shadow:0 12px 25px rgba(0,0,0,0.35); }
 
-.desc-card button:hover {
-  transform: translateY(-5px) scale(1.05);
-  box-shadow: 0 12px 25px rgba(0,0,0,0.35);
-}
-
-/* Animasi fade-in */
-@keyframes fadeInUp {
-  0% { opacity:0; transform: translateY(30px);}
-  100% { opacity:1; transform: translateY(0);}
-}
-
-/* Tour Menu Modern (sama style overlay landing) */
+/* Tour Menu Modern */
 #tour-menu {
-  position: absolute;
-  top: 80px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: rgba(255, 255, 255, 0.25);
-  backdrop-filter: blur(10px);
-  padding: 25px 20px;
-  border-radius: 20px;
-  box-shadow: 0 15px 30px rgba(0,0,0,0.2);
-  display: none;
-  z-index: 5;
-  max-width: 320px;
-  width: 90%;
-  text-align: center;
+  position: absolute; top:80px; left:50%; transform:translateX(-50%);
+  background: rgba(255,255,255,0.25); backdrop-filter: blur(10px);
+  padding:25px 20px; border-radius:20px; box-shadow:0 15px 30px rgba(0,0,0,0.2);
+  display:none; z-index:5; max-width:320px; width:90%; text-align:center;
 }
-
-/* Tour Menu Heading */
-#tour-menu h2 {
-  margin: 0 0 15px 0;
-  color: #8B0000;
-  font-size: 22px;
-  font-weight: 700;
-}
-
-/* Tour Buttons */
+#tour-menu h2 { margin-bottom:15px; color:#8B0000; font-size:22px; font-weight:700; }
 #tour-menu .buttons button {
-  display: block;
-  width: 100%;
-  margin: 8px 0;
-  padding: 12px 0;
-  border: none;
-  border-radius: 15px;
-  background-color: #8B0000;
-  color: white;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
+  display:block; width:100%; margin:8px 0; padding:12px 0; border:none; border-radius:15px;
+  background-color:#8B0000; color:white; font-weight:600; cursor:pointer; transition: all 0.3s ease;
 }
-
-#tour-menu .buttons button:hover {
-  background-color: #b22222;
-  transform: scale(1.05);
+#tour-menu .buttons button:hover { background-color:#b22222; transform:scale(1.05); }
+#close-menu {
+  margin-top:12px; padding:10px 0; width:100%; border-radius:15px; background-color:#444; color:white;
+  font-weight:600; cursor:pointer; transition: all 0.3s ease;
 }
+#close-menu:hover { background-color:#666; transform:scale(1.03); }
 
 /* 3D Scene */
-#scene-container {
-  width: 100vw;
-  height: calc(100vh - 60px);
-  background-color: #e0f7fa;
-}
+#scene-container { width:100vw; height:calc(100vh-60px); background-color:#e0f7fa; }
+
+/* Animasi fade-in */
+@keyframes fadeInUp {0%{opacity:0; transform:translateY(30px);}100%{opacity:1; transform:translateY(0);}}
 
 /* Responsif */
-@media screen and (max-width: 600px) {
-  .desc-card { padding: 20px 15px; }
-  .desc-card h2 { font-size: 22px; }
-  .desc-card p { font-size: 15px; }
-  .desc-card button { padding: 12px 28px; font-size: 15px; }
-  #tour-menu { padding: 20px 15px; }
-  #tour-menu h2 { font-size: 20px; }
-  #tour-menu .buttons button { padding: 10px 0; font-size: 14px; }
+@media screen and (max-width:600px){
+  .desc-card { padding:20px 15px; }
+  .desc-card h2 { font-size:22px; }
+  .desc-card p { font-size:15px; }
+  .desc-card button { padding:12px 28px; font-size:15px; }
+  #tour-menu { padding:20px 15px; }
+  #tour-menu h2 { font-size:20px; }
+  #tour-menu .buttons button { padding:10px 0; font-size:14px; }
+  #close-menu { padding:8px 0; font-size:14px; }
 }

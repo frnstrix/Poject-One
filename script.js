@@ -1,34 +1,34 @@
 document.addEventListener("DOMContentLoaded",()=>{
 
-const startButton=document.getElementById('start-tour');
-const tourMenu=document.getElementById('tour-menu');
-const landing=document.getElementById('landing');
-const sceneContainer=document.getElementById('scene-container');
-const closeMenuBtn=document.getElementById('close-menu');
-const backButton=document.getElementById('back-button');
+const startButton = document.getElementById('start-tour');
+const tourMenu = document.getElementById('tour-menu');
+const landing = document.getElementById('landing');
+const closeMenuBtn = document.getElementById('close-menu');
+const sceneContainer = document.getElementById('scene-container');
+const backButton = document.getElementById('back-button');
 
 let scene,camera,renderer,controls,currentModel;
-const loader=new THREE.GLTFLoader();
+const loader = new THREE.GLTFLoader();
 
-// Start Tour
+// Start Tour → buka menu pilih tampilan
 startButton.addEventListener('click',()=>{
-  tourMenu.classList.remove('fade-out');
-  tourMenu.style.display='flex';
+  landing.style.display = 'none';
+  tourMenu.style.display = 'flex';
   tourMenu.classList.add('fade-in');
 });
 
-// Close Menu
+// Tutup Menu → kembali ke landing
 closeMenuBtn.addEventListener('click',()=>{
-  tourMenu.classList.remove('fade-in');
-  tourMenu.classList.add('fade-out');
-  setTimeout(()=>{tourMenu.style.display='none';},500);
+  tourMenu.style.display = 'none';
+  landing.style.display = 'flex';
+  landing.classList.add('fade-in');
 });
 
-// Back Button 3D
+// Back → dari scene 3D kembali ke landing
 backButton.addEventListener('click',()=>{
-  sceneContainer.style.display='none';
-  landing.style.display='flex';
-  backButton.style.display='none';
+  sceneContainer.style.display = 'none';
+  backButton.style.display = 'none';
+  landing.style.display = 'flex';
   if(currentModel){
     scene.remove(currentModel);
     currentModel.traverse(child=>{
@@ -38,36 +38,37 @@ backButton.addEventListener('click',()=>{
   }
 });
 
-// Three.js Init
+// Three.js setup
 function initThree(){
-  scene=new THREE.Scene();
-  scene.background=new THREE.Color(0xf0f0f0);
-  camera=new THREE.PerspectiveCamera(60,window.innerWidth/window.innerHeight,0.1,1000);
+  scene = new THREE.Scene();
+  scene.background = new THREE.Color(0xf0f0f0);
+  camera = new THREE.PerspectiveCamera(60, window.innerWidth/window.innerHeight, 0.1, 1000);
   camera.position.set(0,2,5);
 
-  renderer=new THREE.WebGLRenderer({antialias:true});
-  renderer.setSize(window.innerWidth,window.innerHeight);
+  renderer = new THREE.WebGLRenderer({antialias:true});
+  renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.setPixelRatio(window.devicePixelRatio);
   sceneContainer.appendChild(renderer.domElement);
 
-  controls=new THREE.OrbitControls(camera,renderer.domElement);
-  controls.enableDamping=true;
-  controls.dampingFactor=0.1;
-  controls.enablePan=false;
+  controls = new THREE.OrbitControls(camera, renderer.domElement);
+  controls.enableDamping = true;
 
-  const ambient=new THREE.AmbientLight(0xffffff,0.6);
+  const ambient = new THREE.AmbientLight(0xffffff,0.6);
   scene.add(ambient);
-  const directional=new THREE.DirectionalLight(0xffffff,0.8);
+  const directional = new THREE.DirectionalLight(0xffffff,0.8);
   directional.position.set(10,20,10);
   scene.add(directional);
 
   animate();
 }
+function animate(){
+  requestAnimationFrame(animate);
+  controls.update();
+  renderer.render(scene,camera);
+}
 
-function animate(){ requestAnimationFrame(animate); controls.update(); renderer.render(scene,camera); }
-
-// Load Model 3D
-window.showModel=function(lantai){
+// Show Model
+window.showModel = function(lantai){
   if(currentModel){
     scene.remove(currentModel);
     currentModel.traverse(child=>{
@@ -76,12 +77,10 @@ window.showModel=function(lantai){
     currentModel=null;
   }
 
-  sceneContainer.style.display='block';
-  backButton.style.display='block';
-  landing.style.display='none';
-  tourMenu.classList.remove('fade-in');
-  tourMenu.classList.add('fade-out');
-  setTimeout(()=>{tourMenu.style.display='none';},500);
+  sceneContainer.style.display = 'block';
+  backButton.style.display = 'block';
+  landing.style.display = 'none';
+  tourMenu.style.display = 'none';
 
   let path='';
   switch(lantai){
@@ -99,7 +98,9 @@ window.showModel=function(lantai){
     scene.add(currentModel);
     currentModel.position.set(0,0,0);
     currentModel.scale.set(1,1,1);
-  },undefined,err=>{console.error('Error load model:',err);});
+  },undefined,err=>{
+    console.error('Error load model:',err);
+  });
 };
 
 window.addEventListener('resize',()=>{

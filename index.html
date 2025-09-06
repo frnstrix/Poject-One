@@ -1,9 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Virtual TUS</title>
-  <!-- Google Fonts modern & elegan -->
+  <!-- Google Fonts elegan -->
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
@@ -15,7 +16,7 @@
   </header>
 
   <!-- Landing Page -->
-  <div id="landing">
+  <section id="landing">
     <div id="building-container">
       <div id="building-desc">
         <div class="desc-card">
@@ -32,10 +33,10 @@
         </div>
       </div>
     </div>
-  </div>
+  </section>
 
   <!-- Tour Menu -->
-  <div id="tour-menu">
+  <aside id="tour-menu">
     <h2>Pilih Tampilan:</h2>
     <div class="buttons">
       <button onclick="showModel('exterior')">Tampak Luar Gedung</button>
@@ -45,15 +46,18 @@
       <button onclick="showModel('floor3')">Lantai 3</button>
       <button onclick="showModel('rooftop')">Rooftop</button>
     </div>
-  </div>
+    <button id="close-menu" onclick="closeMenu()">Tutup Menu</button>
+  </aside>
 
   <!-- 3D Scene -->
   <div id="scene-container" style="display:none;"></div>
 
-  <!-- Three.js Libraries -->
+  <!-- Libraries Three.js -->
   <script src="https://cdn.jsdelivr.net/npm/three@0.156.1/build/three.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/three@0.156.1/examples/js/loaders/GLTFLoader.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/three@0.156.1/examples/js/controls/OrbitControls.js"></script>
+
+  <!-- Script utama -->
   <script src="script.js"></script>
 
 </body>

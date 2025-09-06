@@ -1,63 +1,34 @@
-/* ===== GENERAL ===== */
-* {margin:0; padding:0; box-sizing:border-box; font-family:'Montserrat', sans-serif;}
-body, html {width:100%; height:100%; overflow-x:hidden;}
+*{margin:0; padding:0; box-sizing:border-box; font-family:'Montserrat',sans-serif;}
+body, html{width:100%; height:100%; overflow-x:hidden;}
 
-/* ===== TOP BAR ===== */
-#top-bar {
-  width:100%; height:60px; background:#8B0000; display:flex; justify-content:center; align-items:center;
-  position:fixed; top:0; left:0; z-index:200;
-}
-#top-bar .logo {color:#fff; font-size:22px; font-weight:700; letter-spacing:1px;}
+#top-bar{width:100%; height:60px; background:#8B0000; display:flex; justify-content:center; align-items:center; position:fixed; top:0; left:0; z-index:200;}
+#top-bar .logo{color:#fff; font-size:22px; font-weight:700; letter-spacing:1px;}
 
-/* ===== LANDING ===== */
-#landing {position:relative; width:100%; height:100vh; display:flex; justify-content:center; align-items:center; overflow:hidden;}
-#landing .overlay {
-  position:absolute; top:0; left:0; width:100%; height:100%;
-  background:url('assets/building.jpg') no-repeat center center; background-size:cover;
-  filter:blur(3px); opacity:0.35; z-index:0;
-}
-.landing-content {position:relative; z-index:1; width:100%; display:flex; justify-content:center; align-items:center;}
-.desc-card {background:rgba(255,255,255,0.9); padding:30px 25px; border-radius:20px; max-width:75%; text-align:center;}
-.desc-card h1 {font-size:28px; margin-bottom:15px;}
-.desc-card p {font-size:16px; line-height:1.6; margin-bottom:20px;}
-.button-wrapper {display:flex; justify-content:center;}
-.button-wrapper button {
-  padding:12px 25px; background:#8B0000; color:#fff; font-size:16px; border:none; border-radius:12px;
-  cursor:pointer; transition:all 0.3s ease;
-}
-.button-wrapper button:hover {background:#a00000;}
+#landing{position:relative; width:100%; height:100vh; display:flex; justify-content:center; align-items:center; overflow:hidden;}
+#landing .overlay{position:absolute; top:0; left:0; width:100%; height:100%; background:url('assets/building.jpg') no-repeat center center; background-size:cover; filter:blur(3px); opacity:0.35; z-index:0;}
+.landing-content{position:relative; z-index:1; width:100%; display:flex; justify-content:center; align-items:center;}
+.desc-card{background:rgba(255,255,255,0.9); padding:30px 25px; border-radius:20px; max-width:75%; text-align:center;}
+.desc-card h1{font-size:28px; margin-bottom:15px;}
+.desc-card p{font-size:16px; line-height:1.6; margin-bottom:20px;}
+.button-wrapper{display:flex; justify-content:center;}
+.button-wrapper button{padding:12px 25px; background:#8B0000; color:#fff; font-size:16px; border:none; border-radius:12px; cursor:pointer; transition:all 0.3s ease;}
+.button-wrapper button:hover{background:#a00000;}
 
-/* ===== TOUR MENU ===== */
-#tour-menu {
-  position:fixed; top:50%; left:50%; transform:translate(-50%, -50%);
-  padding:25px 20px; border-radius:25px; box-shadow:0 15px 30px rgba(0,0,0,0.3);
-  display:none; z-index:100; max-width:340px; width:90%; text-align:center; overflow:hidden;
-}
-#tour-menu .menu-overlay {
-  position:absolute; top:0; left:0; width:100%; height:100%;
-  background:url('assets/building.jpg') no-repeat center center;
-  background-size:cover; filter:blur(3px); opacity:0.35; z-index:0; border-radius:25px;
-}
-#tour-menu h2, #tour-menu .buttons, #close-menu {position:relative; z-index:1; margin-bottom:15px;}
-#tour-menu .buttons button {
-  display:block; width:80%; margin:8px auto; padding:10px; font-size:16px;
-  border-radius:10px; border:none; background:#8B0000; color:#fff; cursor:pointer;
-  transition:all 0.3s ease;
-}
-#tour-menu .buttons button:hover {background:#a00000;}
-#close-menu {
-  padding:10px 15px; border:none; border-radius:10px; background:#555; color:#fff; cursor:pointer;
-}
-#close-menu:hover {background:#333;}
+#tour-menu{position:fixed; top:0; left:0; width:100%; height:100%; display:none; z-index:100; display:flex; justify-content:center; align-items:center;}
+#tour-menu .menu-overlay{position:absolute; top:0; left:0; width:100%; height:100%; background:url('assets/building.jpg') no-repeat center center; background-size:cover; filter:blur(3px); opacity:0.35; z-index:0;}
+#tour-menu .menu-content{position:relative; z-index:1; background:rgba(255,255,255,0.9); padding:25px 20px; border-radius:25px; max-width:340px; width:90%; text-align:center;}
+#tour-menu .menu-content h2{margin-bottom:15px;}
+#tour-menu .menu-content .buttons button{display:block; width:80%; margin:8px auto; padding:10px; font-size:16px; border-radius:10px; border:none; background:#8B0000; color:#fff; cursor:pointer; transition:all 0.3s ease;}
+#tour-menu .menu-content .buttons button:hover{background:#a00000;}
+#close-menu{margin-top:15px; padding:10px 15px; border:none; border-radius:10px; background:#555; color:#fff; cursor:pointer;}
+#close-menu:hover{background:#333;}
 
-/* ===== SCENE CONTAINER ===== */
-#scene-container {
-  position:fixed; top:0; left:0; width:100%; height:100%; display:none; z-index:150;
-}
+#scene-container{position:fixed; top:0; left:0; width:100%; height:100%; display:none; z-index:150;}
 
-/* ===== RESPONSIVE ===== */
 @media screen and (max-width:768px){
-  .desc-card {padding:20px; max-width:90%;}
-  .desc-card h1 {font-size:22px;}
-  .desc-card p {font-size:14px;}
+  .desc-card{padding:20px; max-width:90%;}
+  .desc-card h1{font-size:22px;}
+  .desc-card p{font-size:14px;}
+  .button-wrapper button{width:70%; font-size:14px;}
+  #tour-menu .menu-content{width:90%;}
 }

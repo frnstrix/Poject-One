@@ -1,3 +1,4 @@
+// Screens
 const screens = {
   landing: document.getElementById('landing'),
   menu: document.getElementById('menu'),
@@ -25,7 +26,6 @@ addPress(btnBack, ()=>{
   showScreen('menu');
   document.getElementById('panorama-container').style.display='none';
   if(panoramaViewer){ panoramaViewer.destroy(); panoramaViewer=null; }
-  removeArrows();
 });
 
 menuGrid.addEventListener('click',(e)=>{
@@ -35,10 +35,7 @@ menuGrid.addEventListener('click',(e)=>{
 
   if(key==='exterior'){
     showScreen('scene');
-    loadPanorama([
-      'assets/photos/exterior/german_town_street_4k.jpg',
-      'assets/photos/exterior/derelict_airfield_01_4k.jpg'
-    ]);
+    loadPanorama('assets/photos/exterior/german_town_street_4k.jpg');
   } else {
     alert('Foto 360° belum tersedia untuk menu ini.');
   }
@@ -52,51 +49,51 @@ function addPress(el, fn){
 
 // Panorama
 let panoramaViewer = null;
-let panoIndex = 0;
-let panoImages = [];
 
-function loadPanorama(images){
-  document.getElementById('panorama-container').style.display='block';
-  panoImages = images;
-  panoIndex = 0;
-  loadCurrentPano();
-}
+// Panorama list & hotspots
+const panoramas = [
+  {
+    url: 'assets/photos/exterior/german_town_street_4k.jpg',
+    hotspots: [
+      {pitch: 0, yaw: 90, type:'scene', text:'Menuju Derelict Airfield', target:1}
+    ]
+  },
+  {
+    url: 'assets/photos/exterior/derelict_airfield_01_4k.jpg',
+    hotspots: [
+      {pitch: 0, yaw: -90, type:'scene', text:'Kembali ke German Town Street', target:0}
+    ]
+  }
+];
 
-function loadCurrentPano(){
+let currentPano = 0;
+
+function loadPanorama(urlOrIndex){
   const panoContainer = document.getElementById('panorama-container');
+  panoContainer.style.display='block';
   if(panoramaViewer){ panoramaViewer.destroy(); panoramaViewer=null; }
+
+  if(typeof urlOrIndex==='number') currentPano = urlOrIndex;
+  const panoData = (typeof urlOrIndex==='number') ? panoramas[urlOrIndex] : panoramas[0];
+
   panoramaViewer = pannellum.viewer('panorama-container', {
     type: 'equirectangular',
-    panorama: panoImages[panoIndex],
+    panorama: panoData.url,
     autoLoad: true,
-    showControls: true
+    compass: false,
+    showControls: true,
+    hotSpots: panoData.hotspots.map(h=>{
+      return {
+        pitch: h.pitch,
+        yaw: h.yaw,
+        type: h.type,
+        text: h.text,
+        clickHandlerFunc: ()=>{
+          loadPanorama(h.target);
+        }
+      }
+    })
   });
-  addArrows();
-}
-
-// Panah in-image
-function addArrows(){
-  removeArrows();
-  const container = document.getElementById('panorama-container');
-  const next = document.createElement('div');
-  next.className = 'pano-arrow';
-  next.style.right = '20px';
-  next.style.top = '50%';
-  next.innerHTML = '→';
-  next.onclick = ()=>{ panoIndex = (panoIndex+1) % panoImages.length; loadCurrentPano();}
-  container.appendChild(next);
-
-  const prev = document.createElement('div');
-  prev.className = 'pano-arrow';
-  prev.style.left = '20px';
-  prev.style.top = '50%';
-  prev.innerHTML = '←';
-  prev.onclick = ()=>{ panoIndex = (panoIndex-1+panoImages.length) % panoImages.length; loadCurrentPano();}
-  container.appendChild(prev);
-}
-
-function removeArrows(){
-  document.querySelectorAll('.pano-arrow').forEach(el=>el.remove());
 }
 
 // Init

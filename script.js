@@ -108,7 +108,7 @@ const loader = new THREE.GLTFLoader();
 function loadModel(key){
   initThree(); showScreen('scene'); loadingEl.classList.remove('hidden');
   const map={
-    ground:'assets/models/ground.glb',
+    ground:'assets/photos/exterior/PXL_20250906_031158762.PHOTOSPHERE.jpg',
     floor1:'assets/models/floor1.glb',
     floor2:'assets/models/floor2.glb',
     floor3:'assets/models/floor3.glb',

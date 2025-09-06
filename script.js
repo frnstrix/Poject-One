@@ -1,107 +1,96 @@
-// DOM Elements
-const startButton = document.getElementById('start-tour');
-const tourMenu = document.getElementById('tour-menu');
-const landing = document.getElementById('landing');
-const sceneContainer = document.getElementById('scene-container');
+// ------ Helper toggle screen ------
+const screens = {
+  landing: document.getElementById('landing'),
+  menu: document.getElementById('menu'),
+  scene: document.getElementById('scene'),
+};
+const bg = document.getElementById('bg');
 
-// Utility: switch page with animation
-function switchPage(show, hide) {
-  hide.classList.remove("active");
-  setTimeout(() => {
-    hide.style.display = "none";
-    show.style.display = "flex";
-    setTimeout(() => show.classList.add("active"), 50);
-  }, 400);
+function showScreen(name){
+  Object.entries(screens).forEach(([key, el])=>{
+    el.classList.toggle('is-active', key === name);
+  });
+  // background hanya untuk landing & menu
+  bg.style.opacity = (name === 'scene') ? '0' : '1';
+  bg.style.pointerEvents = (name === 'scene') ? 'none' : 'auto';
 }
 
-// Start Tour button
-startButton.addEventListener('click', (e) => {
-  e.preventDefault();
-  switchPage(tourMenu, landing);
+// ------ Buttons ------
+const btnStart = document.getElementById('btn-start');
+const btnCloseMenu = document.getElementById('btn-close-menu');
+const menuGrid = document.querySelector('.menu-grid');
+
+addPress(btnStart, ()=> showScreen('menu'));
+addPress(btnCloseMenu, ()=> showScreen('landing'));
+
+// Delegasi klik untuk tombol model
+menuGrid.addEventListener('click',(e)=>{
+  const btn = e.target.closest('button[data-model]');
+  if(!btn) return;
+  const key = btn.getAttribute('data-model');
+  loadModel(key);
 });
 
-// Close Menu
-function closeMenu() {
-  switchPage(landing, tourMenu);
+// Utility untuk mobile (pointerup lebih stabil)
+function addPress(el, fn){
+  el.addEventListener('pointerup', (e)=>{ e.preventDefault(); fn(); }, {passive:false});
 }
 
-// Three.js setup
+// ------ three.js setup ------
 let scene, camera, renderer, controls, currentModel;
-function initThree() {
-  scene = new THREE.Scene();
-  scene.background = new THREE.Color(0xf0f0f0);
+const canvasWrap = document.getElementById('scene-canvas');
+const btnBack = document.getElementById('btn-back');
+const loadingEl = document.getElementById('loading');
 
-  camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+addPress(btnBack, ()=>{
+  // kembali ke menu
+  showScreen('menu');
+  // hapus model dari scene
+  if(currentModel){
+    cleanupModel(currentModel);
+    scene.remove(currentModel);
+    currentModel = null;
+  }
+});
+
+function initThree(){
+  if(renderer) return; // prevent re-init
+  scene = new THREE.Scene();
+  scene.background = new THREE.Color(0x0d0d0d);
+
+  camera = new THREE.PerspectiveCamera(60, getW()/getH(), 0.1, 2000);
   camera.position.set(0, 2, 5);
 
-  renderer = new THREE.WebGLRenderer({ antialias: true });
-  renderer.setSize(window.innerWidth, window.innerHeight);
-  renderer.setPixelRatio(window.devicePixelRatio);
-  sceneContainer.appendChild(renderer.domElement);
+  renderer = new THREE.WebGLRenderer({ antialias:true, alpha:false });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.setSize(getW(), getH());
+  canvasWrap.appendChild(renderer.domElement);
 
   controls = new THREE.OrbitControls(camera, renderer.domElement);
   controls.enableDamping = true;
-  controls.dampingFactor = 0.1;
+  controls.dampingFactor = 0.08;
   controls.enablePan = false;
 
-  const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
-  scene.add(ambientLight);
-  const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
-  directionalLight.position.set(10, 20, 10);
-  scene.add(directionalLight);
+  const ambient = new THREE.AmbientLight(0xffffff, .7);
+  scene.add(ambient);
+  const dir = new THREE.DirectionalLight(0xffffff, .9);
+  dir.position.set(8, 16, 8);
+  dir.castShadow = false;
+  scene.add(dir);
 
   animate();
 }
-
-function animate() {
+function animate(){
   requestAnimationFrame(animate);
-  if (controls) controls.update();
-  if (renderer && scene && camera) renderer.render(scene, camera);
+  if(controls) controls.update();
+  if(renderer && scene && camera) renderer.render(scene, camera);
 }
 
-// Load GLTF
-const loader = new THREE.GLTFLoader();
-function showModel(lantai) {
-  if (!scene) initThree();
+function getW(){ return window.innerWidth; }
+function getH(){ return Math.max(0, window.innerHeight - 56); } // minus topbar
 
-  if (currentModel) {
-    scene.remove(currentModel);
-    currentModel.traverse((child) => {
-      if (child.isMesh) {
-        child.geometry.dispose();
-        child.material.dispose();
-      }
-    });
-    currentModel = null;
-  }
-
-  switchPage(sceneContainer, tourMenu);
-
-  let path = '';
-  switch (lantai) {
-    case 'exterior': path = 'assets/models/exterior.glb'; break;
-    case 'ground': path = 'assets/models/ground.glb'; break;
-    case 'floor1': path = 'assets/models/floor1.glb'; break;
-    case 'floor2': path = 'assets/models/floor2.glb'; break;
-    case 'floor3': path = 'assets/models/floor3.glb'; break;
-    case 'rooftop': path = 'assets/models/rooftop.glb'; break;
-    default: console.log('Model tidak tersedia'); return;
-  }
-
-  loader.load(path, function (gltf) {
-    currentModel = gltf.scene;
-    scene.add(currentModel);
-    currentModel.position.set(0, 0, 0);
-    currentModel.scale.set(1, 1, 1);
-  }, undefined, function (error) {
-    console.error('Error load model:', error);
-  });
-}
-
-// Resize Handler
-window.addEventListener('resize', () => {
-  if (!camera || !renderer) return;
-  camera.aspect = window.innerWidth / window.innerHeight;
+window.addEventListener('resize', ()=>{
+  if(!camera || !renderer) return;
+  camera.aspect = getW()/getH();
   camera.updateProjectionMatrix();
-  renderer.setSize(window.innerWidth, window.innerHeight);
-});
+  renderer.s

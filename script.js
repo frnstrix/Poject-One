@@ -50,8 +50,8 @@ function addPress(el, fn){
 // Panorama
 let panoramaViewer = null;
 const exteriorPhotos = [
-  'assets/photos/exterior/derelict_airfield_01_4k.hdr',
-  'assets/photos/exterior/plac_wolnosci_4k.hdr'
+  'assets/photos/exterior/derelict_airfield_01_4k.jpg',
+  'assets/photos/exterior/german_town_street_4k.jpg'
 ];
 let currentIndex = 0;
 

@@ -1,1 +1,30 @@
-index.html, script.js, style.css, assets/
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Virtual Travel</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Container untuk 3D scene -->
+  <div id="scene-container"></div>
+
+  <!-- UI Panel -->
+  <div id="ui-panel">
+    <h2>Virtual Travel</h2>
+    <div class="buttons">
+      <button onclick="showFloor('floor1')">Lantai 1</button>
+      <button onclick="showFloor('floor2')">Lantai 2</button>
+      <button onclick="showFloor('floor3')">Lantai 3</button>
+    </div>
+  </div>
+
+  <!-- Three.js Library -->
+  <script src="https://cdn.jsdelivr.net/npm/three@0.156.1/build/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.156.1/examples/js/loaders/GLTFLoader.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.156.1/examples/js/controls/OrbitControls.js"></script>
+  
+  <!-- Custom Script -->
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,69 +1,86 @@
-/* Reset & Font */
-body {
+/* Reset */
+body, html {
   margin: 0;
-  font-family: 'Inter', sans-serif;
+  padding: 0;
+  font-family: 'Poppins', sans-serif;
   overflow: hidden;
+}
+
+/* Top Bar */
+#top-bar {
+  width: 100%;
+  height: 60px;
+  background-color: #8B0000; /* merah tua */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
+
+#top-bar h1 {
+  color: white;
+  font-size: 24px;
+  font-weight: 600;
+  margin: 0;
 }
 
 /* Landing Page */
 #landing {
   width: 100vw;
-  height: 100vh;
-  background: url('assets/background.jpg') center/cover no-repeat;
+  height: calc(100vh - 60px);
+  background-color: #f5f5f5;
   display: flex;
-  flex-direction: column;
-  align-items: center;
   justify-content: center;
+  align-items: center;
 }
 
-#landing-bar {
-  width: 100%;
-  background-color: rgba(0,0,0,0.6);
-  padding: 15px;
+#building-container {
+  position: relative;
   text-align: center;
 }
 
-#landing-bar h1 {
-  margin: 0;
-  color: red;
-  font-size: 32px;
-  font-weight: 600;
+#building-img {
+  width: 600px;
+  max-width: 90%;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.3);
 }
 
-#landing-content {
-  margin-top: 50px;
-  text-align: center;
-  color: white;
-  max-width: 600px;
+#building-desc {
+  margin-top: 20px;
 }
 
-#landing-content p {
+#building-desc p {
   font-size: 18px;
-  margin-bottom: 30px;
+  color: #333;
+  margin-bottom: 15px;
 }
 
-#landing-content button {
-  padding: 12px 24px;
+/* Tombol Mulai Tur */
+#building-desc button {
+  padding: 12px 30px;
   font-size: 16px;
   font-weight: 600;
-  color: white;
-  background-color: #00bcd4;
   border: none;
-  border-radius: 8px;
+  border-radius: 50px;
+  background: linear-gradient(135deg, #ff5252, #ff1744);
+  color: white;
   cursor: pointer;
-  transition: background 0.3s;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+  transition: transform 0.2s, box-shadow 0.2s;
 }
 
-#landing-content button:hover {
-  background-color: #0097a7;
+#building-desc button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.4);
 }
 
 /* Tour Menu */
 #tour-menu {
   position: absolute;
-  top: 20px;
+  top: 80px;
   left: 20px;
-  background: rgba(255,255,255,0.9);
+  background: rgba(255,255,255,0.95);
   padding: 15px;
   border-radius: 12px;
   box-shadow: 0 8px 20px rgba(0,0,0,0.25);
@@ -72,7 +89,7 @@ body {
 
 #tour-menu h2 {
   margin: 0 0 10px 0;
-  color: #00796b;
+  color: #8B0000;
 }
 
 #tour-menu .buttons button {
@@ -81,8 +98,8 @@ body {
   margin: 5px 0;
   padding: 10px 0;
   border: none;
-  border-radius: 8px;
-  background-color: #00bcd4;
+  border-radius: 12px;
+  background-color: #8B0000;
   color: white;
   font-weight: 600;
   cursor: pointer;
@@ -90,13 +107,13 @@ body {
 }
 
 #tour-menu .buttons button:hover {
-  background-color: #0097a7;
+  background-color: #b22222;
   transform: scale(1.05);
 }
 
 /* 3D Scene */
 #scene-container {
   width: 100vw;
-  height: 100vh;
+  height: calc(100vh - 60px);
   background-color: #e0f7fa;
 }

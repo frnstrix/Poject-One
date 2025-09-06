@@ -1,106 +1,123 @@
-const screens = {
-  landing: document.getElementById('landing'),
-  menu: document.getElementById('menu'),
-  scene: document.getElementById('scene')
+let scene, camera, renderer, controls, sphere;
+
+// DOM Elements
+const startButton = document.getElementById('start-tour');
+const landing = document.getElementById('landing');
+const tourMenu = document.getElementById('tour-menu');
+const sceneContainer = document.getElementById('scene-container');
+const infoCard = document.getElementById('info-card');
+const tourButtons = document.querySelectorAll('.tour-btn');
+
+// Start Tour
+startButton.addEventListener('click', () => {
+  tourMenu.style.display = 'block';
+  landing.style.display = 'flex';
+});
+
+// Close Menu
+function closeMenu() {
+  tourMenu.style.display = 'none';
+  landing.style.display = 'flex';
+  if(sphere) sceneContainer.style.display = 'none';
+}
+
+// Load scene when menu clicked
+tourButtons.forEach(btn => {
+  btn.addEventListener('click', () => {
+    const sceneName = btn.dataset.scene;
+    startPhotoSphere(sceneName);
+  });
+});
+
+// Photo Sphere images
+const photoScenes = {
+  exterior: ['assets/photos/exterior/PXL_20250906_031158762.PHOTOSPHERE.jpg'],
+  ground: [], // nanti ditambah
+  floor1: [],
+  floor2: [],
+  floor3: [],
+  rooftop: []
 };
-const bg = document.getElementById('bg');
 
-function showScreen(name){
-  Object.entries(screens).forEach(([key, el])=>{
-    el.classList.toggle('is-active', key===name);
-  });
-  bg.style.opacity = (name==='scene')?'0':'1';
-  bg.style.pointerEvents = (name==='scene')?'none':'auto';
+let currentScene = 'exterior';
+let currentIndex = 0;
+
+// Initialize Three.js
+function startPhotoSphere(sceneName) {
+  currentScene = sceneName;
+  currentIndex = 0;
+  landing.style.display = 'none';
+  tourMenu.style.display = 'none';
+  sceneContainer.style.display = 'block';
+
+  if(!scene) initThree();
+  loadPhotoSphere(photoScenes[currentScene][currentIndex]);
 }
 
-// Buttons
-const btnStart = document.getElementById('btn-start');
-const btnCloseMenu = document.getElementById('btn-close-menu');
-const menuGrid = document.querySelector('.menu-grid');
-addPress(btnStart, ()=>showScreen('menu'));
-addPress(btnCloseMenu, ()=>showScreen('landing'));
-menuGrid.addEventListener('click',(e)=>{
-  const btn = e.target.closest('button[data-model]');
-  if(!btn) return;
-  loadModel(btn.getAttribute('data-model'));
-});
+// Three.js setup
+function initThree() {
+  scene = new THREE.Scene();
+  camera = new THREE.PerspectiveCamera(
+    75, window.innerWidth/window.innerHeight, 0.1, 1000
+  );
+  camera.position.set(0,0,0.1);
 
-function addPress(el,fn){
-  el.addEventListener('pointerup',e=>{ e.preventDefault(); fn(); },{passive:false});
-}
+  renderer = new THREE.WebGLRenderer({ antialias:true });
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  sceneContainer.appendChild(renderer.domElement);
 
-// Three.js
-let scene,camera,renderer,controls,currentModel;
-const canvasWrap=document.getElementById('scene-canvas');
-const btnBack=document.getElementById('btn-back');
-const loadingEl=document.getElementById('loading');
-addPress(btnBack, ()=>{
-  showScreen('menu');
-  if(currentModel){ cleanupModel(currentModel); scene.remove(currentModel); currentModel=null; }
-});
+  controls = new THREE.OrbitControls(camera, renderer.domElement);
+  controls.enableZoom = false;
+  controls.enablePan = false;
 
-function initThree(){
-  if(renderer) return;
-  scene=new THREE.Scene(); scene.background=new THREE.Color(0x0d0d0d);
-  camera=new THREE.PerspectiveCamera(60,getW()/getH(),0.1,2000); camera.position.set(0,2,5);
-  renderer=new THREE.WebGLRenderer({antialias:true, alpha:false});
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio,2)); renderer.setSize(getW(),getH());
-  canvasWrap.appendChild(renderer.domElement);
-  controls=new THREE.OrbitControls(camera,renderer.domElement);
-  controls.enableDamping=true; controls.dampingFactor=0.08; controls.enablePan=false;
-  scene.add(new THREE.AmbientLight(0xffffff,.7));
-  const dir=new THREE.DirectionalLight(0xffffff,.9); dir.position.set(8,16,8); scene.add(dir);
   animate();
-}
-function animate(){ requestAnimationFrame(animate); controls.update(); renderer.render(scene,camera); }
-function getW(){ return window.innerWidth; }
-function getH(){ return Math.max(0, window.innerHeight-56); }
-window.addEventListener('resize',()=>{
-  if(!camera||!renderer)return;
-  camera.aspect=getW()/getH(); camera.updateProjectionMatrix();
-  renderer.setSize(getW(),getH());
-});
 
-const loader = new THREE.GLTFLoader();
-function cleanupModel(root){
-  root.traverse(obj=>{
-    if(obj.isMesh){
-      obj.geometry?.dispose?.();
-      if(Array.isArray(obj.material)){
-        obj.material.forEach(m=>m?.dispose?.());
-      } else obj.material?.dispose?.();
-    }
+  // Hotspot contoh
+  addHotspot(0,0,"Logo Gedung","Ini adalah logo gedung Telkom University Surabaya.");
+}
+
+// Load Photo Sphere
+let sphere;
+function loadPhotoSphere(path) {
+  if(sphere) scene.remove(sphere);
+  const texture = new THREE.TextureLoader().load(path);
+  const geometry = new THREE.SphereGeometry(500,60,40);
+  geometry.scale(-1,1,1);
+  const material = new THREE.MeshBasicMaterial({ map: texture });
+  sphere = new THREE.Mesh(geometry, material);
+  scene.add(sphere);
+}
+
+// Hotspot
+function addHotspot(x,y,title,text) {
+  const div = document.createElement('div');
+  div.className = 'hotspot';
+  div.style.position = 'absolute';
+  div.style.width = '20px';
+  div.style.height = '20px';
+  div.style.background = 'red';
+  div.style.borderRadius = '50%';
+  div.style.cursor = 'pointer';
+  document.body.appendChild(div);
+
+  div.addEventListener('click', () => {
+    infoCard.style.display = 'block';
+    infoCard.querySelector('.title').innerText = title;
+    infoCard.querySelector('.text').innerText = text;
   });
 }
 
-function loadModel(key){
-  initThree(); showScreen('scene'); loadingEl.classList.remove('hidden');
-  const map={
-    exterior:'https://drive.google.com/uc?export=download&id=1qKcLI61PORdAKXi7Lj_HnmHVR20Vh3Fu',
-    ground:'assets/models/ground.glb',
-    floor1:'assets/models/floor1.glb',
-    floor2:'assets/models/floor2.glb',
-    floor3:'assets/models/floor3.glb',
-    rooftop:'assets/models/rooftop.glb'
-  };
-  const url=map[key];
-  if(!url){ console.warn('Model tidak tersedia'); loadingEl.classList.add('hidden'); return; }
-  if(currentModel){ cleanupModel(currentModel); scene.remove(currentModel); currentModel=null; }
-  loader.load(url,(gltf)=>{
-    currentModel=gltf.scene;
-    currentModel.position.set(0,0,0); currentModel.scale.set(1,1,1); scene.add(currentModel);
-    try{
-      const box=new THREE.Box3().setFromObject(currentModel);
-      const size=box.getSize(new THREE.Vector3()).length();
-      const center=box.getCenter(new THREE.Vector3());
-      controls.target.copy(center);
-      camera.position.copy(center).add(new THREE.Vector3(size*0.2,size*0.25,size*0.35));
-      camera.near=Math.max(0.1,size/500); camera.far=Math.max(1000,size*5);
-      camera.updateProjectionMatrix(); controls.update();
-    }catch(e){}
-    loadingEl.classList.add('hidden');
-  },undefined,(err)=>{ console.error('Gagal load model:',err); loadingEl.classList.add('hidden'); });
+// Animate
+function animate() {
+  requestAnimationFrame(animate);
+  controls.update();
+  renderer.render(scene,camera);
 }
 
-// Init awal
-showScreen('landing');
+// Resize
+window.addEventListener('resize', () => {
+  if(!camera || !renderer) return;
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+});

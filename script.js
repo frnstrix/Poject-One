@@ -1,4 +1,3 @@
-// Landing "Mulai Tur"
 const startButton = document.getElementById('start-tour');
 const landing = document.getElementById('landing');
 const sceneContainer = document.getElementById('scene-container');
@@ -11,7 +10,6 @@ startButton.addEventListener('click', () => {
   initScene();
 });
 
-// Three.js Setup (placeholder cube)
 let scene, camera, renderer, controls;
 
 function initScene() {
@@ -31,6 +29,7 @@ function initScene() {
 
   controls = new THREE.OrbitControls(camera, renderer.domElement);
 
+  // Placeholder cube
   const geometry = new THREE.BoxGeometry(1,1,1);
   const material = new THREE.MeshStandardMaterial({ color: 0xff0000 });
   const cube = new THREE.Mesh(geometry, material);

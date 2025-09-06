@@ -9,12 +9,11 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css" />
 
-  <!-- Three.js -->
+  <!-- three.js -->
   <script src="https://unpkg.com/three@0.156.1/build/three.min.js"></script>
   <script src="https://unpkg.com/three@0.156.1/examples/js/controls/OrbitControls.js"></script>
 </head>
 <body>
-
   <!-- Top Bar -->
   <header class="topbar">
     <div class="topbar__title">Virtual TUS</div>
@@ -56,15 +55,11 @@
     </div>
   </section>
 
-  <!-- Scene 360 Photo -->
+  <!-- Scene PhotoSphere -->
   <section id="scene" class="screen">
     <div id="scene-canvas"></div>
     <div id="scene-ui">
       <button id="btn-back" class="btn btn-primary btn-fab">Kembali ke Menu</button>
-      <div class="photo-nav">
-        <button id="btn-prev" class="btn btn-primary btn-fab">&larr;</button>
-        <button id="btn-next" class="btn btn-primary btn-fab">&rarr;</button>
-      </div>
       <div id="loading" class="loading hidden">
         <div class="spinner"></div>
         <span>Memuat foto…</span>

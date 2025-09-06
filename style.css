@@ -68,6 +68,27 @@ body{
 }
 .glass-card h1{margin:.25rem 0 0; font-size:clamp(22px,3.2vw,30px); color:#fff}
 .glass-card h2{margin:.5rem 0 1rem; font-size:clamp(18px,2.6vw,24px); color:#f5f5f5; font-weight:600}
+
+/* Glassmorphism deskripsi landing */
+.glass-desc-landing {
+  background: rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(10px) saturate(1.2);
+  padding: 20px 24px;
+  border-radius: 20px;
+  color: #fff;
+  max-width: 75%;
+  margin: 0 auto 20px;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+.anim-pop-desc {
+  animation: pop-desc 0.5s ease both;
+}
+@keyframes pop-desc {
+  from {opacity:0; transform:translateY(10px) scale(0.98);}
+  to {opacity:1; transform:translateY(0) scale(1);}
+}
+
 .glass-card p{
   margin:0 auto 18px;
   color:#f1f1f1;
@@ -105,10 +126,8 @@ body{
 
 /* Scene */
 #scene{background:#000}
-#panorama-container{
-  position:absolute; inset:56px 0 0 0;
-  display:none;
-}
+#scene-canvas{position:absolute; inset:56px 0 0 0; display:none;}
+#panorama-container{position:absolute; inset:56px 0 0 0; display:none;}
 #scene-ui{
   position:fixed; inset:auto 16px 16px auto;
   z-index:30; display:flex; align-items:center; gap:12px; flex-direction:column;
@@ -118,22 +137,3 @@ body{
 /* Pop animation */
 .anim-pop{animation:pop .45s ease both}
 @keyframes pop{from{opacity:0; transform:translateY(8px) scale(.98)} to{opacity:1; transform:translateY(0) scale(1)}}
-
-/* Panah overlay in-image */
-.pano-arrow {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 48px;
-  color: rgba(255,255,255,.75);
-  cursor: pointer;
-  user-select: none;
-  z-index: 50;
-  padding: 8px;
-  border-radius: 50%;
-  background: rgba(0,0,0,.3);
-  transition: background .2s, transform .2s;
-}
-.pano-arrow:hover { background: rgba(0,0,0,.5); transform: translateY(-50%) scale(1.1); }
-.pano-arrow.left { left: 16px; }
-.pano-arrow.right { right: 16px; }

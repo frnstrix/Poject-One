@@ -4,6 +4,17 @@ const screens = {
   scene: document.getElementById('scene')
 };
 const bg = document.getElementById('bg');
+const loadingEl = document.getElementById('loading');
+const canvasWrap = document.getElementById('scene-canvas');
+const btnBack = document.getElementById('btn-back');
+const btnNext = document.getElementById('btn-next');
+const btnPrev = document.getElementById('btn-prev');
+
+let scene, camera, renderer, controls;
+let sphere = null;
+let currentFolder = '';
+let photos = [];
+let currentIndex = 0;
 
 function showScreen(name){
   Object.entries(screens).forEach(([key, el])=>{
@@ -19,47 +30,61 @@ const btnCloseMenu = document.getElementById('btn-close-menu');
 const menuGrid = document.querySelector('.menu-grid');
 addPress(btnStart, ()=>showScreen('menu'));
 addPress(btnCloseMenu, ()=>showScreen('landing'));
+
 menuGrid.addEventListener('click',(e)=>{
   const btn = e.target.closest('button[data-model]');
   if(!btn) return;
-  const key = btn.getAttribute('data-model');
-  if(key==='exterior'){
-    startPhotoSphere(key);
-  } else {
-    loadModel(key);
-  }
+  loadFolderPhotos(btn.getAttribute('data-model'));
 });
 
-function addPress(el,fn){
-  el.addEventListener('pointerup',e=>{ e.preventDefault(); fn(); },{passive:false});
-}
-
-// Three.js
-let scene,camera,renderer,controls,currentModel,sphere;
-const canvasWrap=document.getElementById('scene-canvas');
-const btnBack=document.getElementById('btn-back');
-const loadingEl=document.getElementById('loading');
 addPress(btnBack, ()=>{
   showScreen('menu');
-  cleanupModel();
   cleanupSphere();
 });
+addPress(btnNext, ()=>nextPhoto());
+addPress(btnPrev, ()=>prevPhoto());
 
-function cleanupModel(){
-  if(currentModel){
-    scene.remove(currentModel);
-    currentModel.traverse(obj=>{
-      if(obj.isMesh){
-        obj.geometry?.dispose?.();
-        if(Array.isArray(obj.material)){
-          obj.material.forEach(m=>m?.dispose?.());
-        } else obj.material?.dispose?.();
-      }
-    });
-    currentModel = null;
-  }
+function addPress(el,fn){
+  el.addEventListener('pointerup', e=>{ e.preventDefault(); fn(); }, {passive:false});
 }
 
+// --- Three.js Init ---
+function initThree(){
+  if(renderer) return;
+  scene = new THREE.Scene();
+  scene.background = new THREE.Color(0x0d0d0d);
+  camera = new THREE.PerspectiveCamera(60, window.innerWidth/window.innerHeight, 0.1, 2000);
+  camera.position.set(0,0,0.1);
+  renderer = new THREE.WebGLRenderer({antialias:true, alpha:false});
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  canvasWrap.appendChild(renderer.domElement);
+
+  controls = new THREE.OrbitControls(camera, renderer.domElement);
+  controls.enableDamping = true; controls.dampingFactor = 0.08;
+  controls.enablePan = false;
+
+  scene.add(new THREE.AmbientLight(0xffffff,0.7));
+  const dir = new THREE.DirectionalLight(0xffffff,0.9);
+  dir.position.set(8,16,8); scene.add(dir);
+
+  animate();
+}
+
+function animate(){
+  requestAnimationFrame(animate);
+  if(controls) controls.update();
+  if(renderer) renderer.render(scene,camera);
+}
+
+window.addEventListener('resize', ()=>{
+  if(!camera||!renderer) return;
+  camera.aspect = window.innerWidth/window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+});
+
+// --- Sphere Photo ---
 function cleanupSphere(){
   if(sphere){
     scene.remove(sphere);
@@ -69,109 +94,59 @@ function cleanupSphere(){
   }
 }
 
-// Init Three.js
-function initThree(){
-  if(renderer) return;
-  scene = new THREE.Scene();
-  camera = new THREE.PerspectiveCamera(75, getW()/getH(), 0.1, 1500);
-  camera.position.set(0,0,0.1);
-
-  renderer = new THREE.WebGLRenderer({antialias:true});
-  renderer.setSize(getW(), getH());
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
-  canvasWrap.innerHTML = '';
-  canvasWrap.appendChild(renderer.domElement);
-
-  controls = new THREE.OrbitControls(camera, renderer.domElement);
-  controls.enableDamping = true;
-  controls.dampingFactor = 0.08;
-  controls.enablePan = false;
-  controls.rotateSpeed = -0.25;
-
-  scene.add(new THREE.AmbientLight(0xffffff,0.5));
-
-  animate();
-}
-
-function animate(){ requestAnimationFrame(animate); controls.update(); renderer.render(scene,camera); }
-function getW(){ return window.innerWidth; }
-function getH(){ return Math.max(0, window.innerHeight-56); }
-window.addEventListener('resize', ()=>{
-  if(!camera||!renderer)return;
-  camera.aspect = getW()/getH();
-  camera.updateProjectionMatrix();
-  renderer.setSize(getW(), getH());
-});
-
-// GLTF Loader untuk lantai lain
-const loader = new THREE.GLTFLoader();
-function loadModel(key){
-  initThree(); showScreen('scene'); loadingEl.classList.remove('hidden');
-  const map={
-    ground:'assets/photos/exterior/PXL_20250906_031158762.PHOTOSPHERE.jpg',
-    floor1:'assets/models/floor1.glb',
-    floor2:'assets/models/floor2.glb',
-    floor3:'assets/models/floor3.glb',
-    rooftop:'assets/models/rooftop.glb'
-  };
-  const url=map[key];
-  if(!url){ console.warn('Model tidak tersedia'); loadingEl.classList.add('hidden'); return; }
-  cleanupModel();
-  loader.load(url,(gltf)=>{
-    currentModel=gltf.scene;
-    currentModel.position.set(0,0,0); currentModel.scale.set(1,1,1);
-    scene.add(currentModel);
-
-    const box=new THREE.Box3().setFromObject(currentModel);
-    const size=box.getSize(new THREE.Vector3()).length();
-    const center=box.getCenter(new THREE.Vector3());
-    controls.target.copy(center);
-    camera.position.copy(center).add(new THREE.Vector3(size*0.2,size*0.25,size*0.35));
-    camera.near=Math.max(0.1,size/500); camera.far=Math.max(1000,size*5);
-    camera.updateProjectionMatrix(); controls.update();
-    loadingEl.classList.add('hidden');
-  },undefined,(err)=>{
-    console.error('Gagal load model:',err); loadingEl.classList.add('hidden');
-  });
-}
-
-// Photo Sphere map
-const sphereMap = {
-  exterior:'assets/photos/exterior/PXL_20250906_031158762.PHOTOSPHERE.jpg'
-};
-
-// Photo Sphere loader
-function startPhotoSphere(key){
-  const url = sphereMap[key];
-  if(!url){ console.warn('Foto tidak tersedia'); return; }
-
+function loadFolderPhotos(folderName){
+  currentFolder = folderName;
+  currentIndex = 0;
+  photos = [];
+  // Sementara manual 1 foto dulu
+  photos.push(`assets/photos/${folderName}/PXL_20250906_031158762.PHOTOSPHERE.jpg`);
   showScreen('scene');
+  loadCurrentPhoto();
+}
+
+function loadCurrentPhoto(){
+  if(!photos.length) return;
+  const url = photos[currentIndex];
   loadingEl.classList.remove('hidden');
   initThree();
   cleanupSphere();
-  cleanupModel();
 
   new THREE.TextureLoader().load(url,
     texture=>{
       loadingEl.classList.add('hidden');
-
-      const geometry = new THREE.SphereGeometry(500, 64, 64);
+      const geometry = new THREE.SphereGeometry(500,64,64);
       geometry.scale(-1,1,1);
       const material = new THREE.MeshBasicMaterial({map:texture});
       sphere = new THREE.Mesh(geometry, material);
       scene.add(sphere);
-
       camera.position.set(0,0,0.1);
       controls.target.set(0,0,0);
       controls.update();
     },
     undefined,
     err=>{
-      console.error('Gagal load foto:', err);
+      console.error('Gagal load foto:',err);
       loadingEl.classList.add('hidden');
     }
   );
 }
 
-// Init awal
+function nextPhoto(){
+  if(!photos.length) return;
+  currentIndex = (currentIndex+1)%photos.length;
+  loadCurrentPhoto();
+}
+function prevPhoto(){
+  if(!photos.length) return;
+  currentIndex = (currentIndex-1+photos.length)%photos.length;
+  loadCurrentPhoto();
+}
+
+// Arrow keys support
+document.addEventListener('keydown', e=>{
+  if(e.key==='ArrowRight') nextPhoto();
+  if(e.key==='ArrowLeft') prevPhoto();
+});
+
+// Init Landing
 showScreen('landing');

@@ -2,25 +2,35 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Virtual Travel</title>
-  
-  <!-- Google Font -->
+  <title>Virtual Tus</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
-  
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <!-- 3D Scene -->
-  <div id="scene-container"></div>
+  <!-- Landing / Header -->
+  <div id="landing">
+    <div id="landing-bar">
+      <h1>Virtual Tus</h1>
+    </div>
+    <div id="landing-content">
+      <p>Selamat datang di Virtual Tus! Jelajahi gedung secara interaktif mulai dari tampak luar hingga rooftop.</p>
+      <button id="start-tour">Mulai Tur</button>
+    </div>
+  </div>
 
-  <!-- UI Panel -->
-  <div id="ui-panel">
-    <h2>Virtual Travel</h2>
-    <p>Pilih Lantai:</p>
+  <!-- 3D Scene -->
+  <div id="scene-container" style="display:none;"></div>
+
+  <!-- Tur Menu -->
+  <div id="tour-menu" style="display:none;">
+    <h2>Pilih Tampilan:</h2>
     <div class="buttons">
-      <button onclick="showFloor('floor1')">Lantai 1</button>
-      <button onclick="showFloor('floor2')">Lantai 2</button>
-      <button onclick="showFloor('floor3')">Lantai 3</button>
+      <button onclick="showModel('exterior')">Tampak Luar Gedung</button>
+      <button onclick="showModel('ground')">Lantai Dasar</button>
+      <button onclick="showModel('floor1')">Lantai 1</button>
+      <button onclick="showModel('floor2')">Lantai 2</button>
+      <button onclick="showModel('floor3')">Lantai 3</button>
+      <button onclick="showModel('rooftop')">Rooftop</button>
     </div>
   </div>
 
@@ -28,8 +38,6 @@
   <script src="https://cdn.jsdelivr.net/npm/three@0.156.1/build/three.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/three@0.156.1/examples/js/loaders/GLTFLoader.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/three@0.156.1/examples/js/controls/OrbitControls.js"></script>
-
-  <!-- Custom Script -->
   <script src="script.js"></script>
 </body>
 </html>

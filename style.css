@@ -1,3 +1,4 @@
+/* Reset & Font */
 body {
   margin: 0;
   font-family: 'Inter', sans-serif;
@@ -66,6 +67,7 @@ body {
   padding: 15px;
   border-radius: 12px;
   box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+  display: none;
 }
 
 #tour-menu h2 {

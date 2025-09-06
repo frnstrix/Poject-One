@@ -1,63 +1,53 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Virtual TUS</title>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Virtual TUS</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
 
-<!-- Three.js -->
-<script src="https://cdn.jsdelivr.net/npm/three@0.156.1/build/three.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/three@0.156.1/examples/js/controls/OrbitControls.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/three@0.156.1/examples/js/loaders/GLTFLoader.js"></script>
+  <!-- Three.js -->
+  <script src="https://cdn.jsdelivr.net/npm/three@0.156.1/build/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.156.1/examples/js/controls/OrbitControls.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.156.1/examples/js/loaders/GLTFLoader.js"></script>
 </head>
 <body>
 
-<header id="top-bar">
-  <div class="logo">Virtual TUS</div>
-</header>
+  <!-- Background blur -->
+  <div class="background"></div>
 
-<!-- Landing Page -->
-<main id="landing">
-  <div class="overlay"></div>
-  <div class="landing-content">
-    <div class="desc-card">
+  <!-- Landing Page -->
+  <section id="landing">
+    <div class="card">
       <h1>Selamat Datang di Virtual TUS</h1>
       <p>
         Telkom Surabaya adalah kampus modern di bidang teknologi informasi dan komunikasi,  
         tempat mahasiswa mengembangkan kreativitas, kompetensi digital, dan kepemimpinan.  
-        Fasilitas canggih tersedia untuk mendukung inovasi.  
         Virtual tour memungkinkan Anda menjelajahi tampak luar, lantai dasar, lantai 1–3, hingga rooftop.
       </p>
-      <div class="button-wrapper">
-        <button id="start-tour">Mulai Tur</button>
-      </div>
+      <button id="start-tour">Mulai Tur</button>
     </div>
-  </div>
-</main>
+  </section>
 
-<!-- Menu Pilih Tampilan (terpisah) -->
-<aside id="tour-menu">
-  <div class="menu-overlay"></div>
-  <div class="menu-content">
-    <h2>Pilih Tampilan</h2>
-    <div class="buttons">
+  <!-- Menu Pilih Tampilan -->
+  <section id="tour-menu">
+    <div class="card">
+      <h2>Pilih Tampilan</h2>
       <button onclick="showModel('exterior')">Tampak Luar Gedung</button>
       <button onclick="showModel('ground')">Lantai Dasar</button>
       <button onclick="showModel('floor1')">Lantai 1</button>
       <button onclick="showModel('floor2')">Lantai 2</button>
       <button onclick="showModel('floor3')">Lantai 3</button>
       <button onclick="showModel('rooftop')">Rooftop</button>
+      <button id="close-menu" class="secondary">Tutup Menu</button>
     </div>
-    <button id="close-menu">Tutup Menu</button>
-  </div>
-</aside>
+  </section>
 
-<!-- Scene 3D -->
-<div id="scene-container"></div>
-<button id="back-button">Kembali</button>
+  <!-- Scene 3D -->
+  <div id="scene-container"></div>
+  <button id="back-button">Kembali</button>
 
-<script src="script.js" defer></script>
+  <script src="script.js"></script>
 </body>
 </html>

@@ -1,123 +1,94 @@
-let scene, camera, renderer, controls, sphere;
+const screens = {
+  landing: document.getElementById('landing'),
+  menu: document.getElementById('menu'),
+  scene: document.getElementById('scene')
+};
+const bg = document.getElementById('bg');
 
-// DOM Elements
-const startButton = document.getElementById('start-tour');
-const landing = document.getElementById('landing');
-const tourMenu = document.getElementById('tour-menu');
-const sceneContainer = document.getElementById('scene-container');
-const infoCard = document.getElementById('info-card');
-const tourButtons = document.querySelectorAll('.tour-btn');
-
-// Start Tour
-startButton.addEventListener('click', () => {
-  tourMenu.style.display = 'block';
-  landing.style.display = 'flex';
-});
-
-// Close Menu
-function closeMenu() {
-  tourMenu.style.display = 'none';
-  landing.style.display = 'flex';
-  if(sphere) sceneContainer.style.display = 'none';
+function showScreen(name){
+  Object.entries(screens).forEach(([key, el])=>{
+    el.classList.toggle('is-active', key===name);
+  });
+  bg.style.opacity = (name==='scene')?'0':'1';
+  bg.style.pointerEvents = (name==='scene')?'none':'auto';
 }
 
-// Load scene when menu clicked
-tourButtons.forEach(btn => {
-  btn.addEventListener('click', () => {
-    const sceneName = btn.dataset.scene;
-    startPhotoSphere(sceneName);
-  });
+// Buttons
+const btnStart = document.getElementById('btn-start');
+const btnCloseMenu = document.getElementById('btn-close-menu');
+const menuGrid = document.querySelector('.menu-grid');
+addPress(btnStart, ()=>showScreen('menu'));
+addPress(btnCloseMenu, ()=>showScreen('landing'));
+menuGrid.addEventListener('click',(e)=>{
+  const btn = e.target.closest('button[data-model]');
+  if(!btn) return;
+  const key = btn.getAttribute('data-model');
+  startPhotoSphere(key);
 });
 
-// Photo Sphere images
-const photoScenes = {
-  exterior: ['assets/photos/exterior/PXL_20250906_031158762.PHOTOSPHERE.jpg'],
-  ground: [], // nanti ditambah
-  floor1: [],
-  floor2: [],
-  floor3: [],
-  rooftop: []
+function addPress(el,fn){
+  el.addEventListener('pointerup',e=>{ e.preventDefault(); fn(); },{passive:false});
+}
+
+// Three.js
+let scene,camera,renderer,controls,sphere;
+const canvasWrap=document.getElementById('scene-canvas');
+const btnBack=document.getElementById('btn-back');
+const loadingEl=document.getElementById('loading');
+addPress(btnBack, ()=>{
+  showScreen('menu');
+  if(sphere){ scene.remove(sphere); sphere=null; }
+});
+
+const sphereMap = {
+  exterior:'assets/photos/exterior/PXL_20250906_031158762.PHOTOSPHERE.jpg'
 };
 
-let currentScene = 'exterior';
-let currentIndex = 0;
-
-// Initialize Three.js
-function startPhotoSphere(sceneName) {
-  currentScene = sceneName;
-  currentIndex = 0;
-  landing.style.display = 'none';
-  tourMenu.style.display = 'none';
-  sceneContainer.style.display = 'block';
-
-  if(!scene) initThree();
-  loadPhotoSphere(photoScenes[currentScene][currentIndex]);
-}
-
-// Three.js setup
-function initThree() {
+function initThree(){
+  if(renderer) return;
   scene = new THREE.Scene();
-  camera = new THREE.PerspectiveCamera(
-    75, window.innerWidth/window.innerHeight, 0.1, 1000
-  );
+  camera = new THREE.PerspectiveCamera(75, getW()/getH(), 0.1, 1000);
   camera.position.set(0,0,0.1);
-
-  renderer = new THREE.WebGLRenderer({ antialias:true });
-  renderer.setSize(window.innerWidth, window.innerHeight);
-  sceneContainer.appendChild(renderer.domElement);
-
+  renderer = new THREE.WebGLRenderer({antialias:true});
+  renderer.setSize(getW(), getH());
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+  canvasWrap.appendChild(renderer.domElement);
   controls = new THREE.OrbitControls(camera, renderer.domElement);
-  controls.enableZoom = false;
+  controls.enableDamping = true;
+  controls.dampingFactor = 0.08;
   controls.enablePan = false;
-
   animate();
-
-  // Hotspot contoh
-  addHotspot(0,0,"Logo Gedung","Ini adalah logo gedung Telkom University Surabaya.");
 }
 
-// Load Photo Sphere
-let sphere;
-function loadPhotoSphere(path) {
-  if(sphere) scene.remove(sphere);
-  const texture = new THREE.TextureLoader().load(path);
+function animate(){ requestAnimationFrame(animate); controls.update(); renderer.render(scene,camera); }
+function getW(){ return window.innerWidth; }
+function getH(){ return Math.max(0, window.innerHeight-56); }
+window.addEventListener('resize', ()=>{
+  if(!camera||!renderer)return;
+  camera.aspect = getW()/getH();
+  camera.updateProjectionMatrix();
+  renderer.setSize(getW(), getH());
+});
+
+// Photo Sphere
+function startPhotoSphere(key){
+  initThree(); showScreen('scene'); loadingEl.classList.remove('hidden');
+  if(sphere){ scene.remove(sphere); sphere=null; }
+  const url = sphereMap[key];
+  if(!url){ console.warn('Foto tidak tersedia'); loadingEl.classList.add('hidden'); return; }
+
+  const texture = new THREE.TextureLoader().load(url, ()=>{
+    loadingEl.classList.add('hidden');
+  });
   const geometry = new THREE.SphereGeometry(500,60,40);
   geometry.scale(-1,1,1);
-  const material = new THREE.MeshBasicMaterial({ map: texture });
-  sphere = new THREE.Mesh(geometry, material);
+  const material = new THREE.MeshBasicMaterial({map:texture});
+  sphere = new THREE.Mesh(geometry,material);
   scene.add(sphere);
-}
-
-// Hotspot
-function addHotspot(x,y,title,text) {
-  const div = document.createElement('div');
-  div.className = 'hotspot';
-  div.style.position = 'absolute';
-  div.style.width = '20px';
-  div.style.height = '20px';
-  div.style.background = 'red';
-  div.style.borderRadius = '50%';
-  div.style.cursor = 'pointer';
-  document.body.appendChild(div);
-
-  div.addEventListener('click', () => {
-    infoCard.style.display = 'block';
-    infoCard.querySelector('.title').innerText = title;
-    infoCard.querySelector('.text').innerText = text;
-  });
-}
-
-// Animate
-function animate() {
-  requestAnimationFrame(animate);
+  camera.position.set(0,0,0.1);
+  controls.target.set(0,0,0);
   controls.update();
-  renderer.render(scene,camera);
 }
 
-// Resize
-window.addEventListener('resize', () => {
-  if(!camera || !renderer) return;
-  camera.aspect = window.innerWidth / window.innerHeight;
-  camera.updateProjectionMatrix();
-  renderer.setSize(window.innerWidth, window.innerHeight);
-});
+// Init awal
+showScreen('landing');

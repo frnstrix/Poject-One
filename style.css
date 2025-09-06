@@ -10,17 +10,15 @@ body, html {
 #top-bar {
   width: 100%;
   height: 60px;
-  background-color: #8B0000; /* merah tua */
+  background-color: #8B0000;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
 }
 
 #top-bar h1 {
   color: white;
   font-size: 24px;
-  font-weight: 600;
   margin: 0;
 }
 
@@ -42,11 +40,6 @@ body, html {
   width: 600px;
   max-width: 90%;
   border-radius: 12px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-}
-
-#building-desc {
-  margin-top: 20px;
 }
 
 #building-desc p {
@@ -55,64 +48,12 @@ body, html {
   margin-bottom: 15px;
 }
 
-/* Tombol Mulai Tur */
 #building-desc button {
   padding: 12px 30px;
   font-size: 16px;
-  font-weight: 600;
   border: none;
   border-radius: 50px;
   background: linear-gradient(135deg, #ff5252, #ff1744);
   color: white;
   cursor: pointer;
-  box-shadow: 0 6px 15px rgba(0,0,0,0.3);
-  transition: transform 0.2s, box-shadow 0.2s;
-}
-
-#building-desc button:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 10px 20px rgba(0,0,0,0.4);
-}
-
-/* Tour Menu */
-#tour-menu {
-  position: absolute;
-  top: 80px;
-  left: 20px;
-  background: rgba(255,255,255,0.95);
-  padding: 15px;
-  border-radius: 12px;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.25);
-  display: none;
-}
-
-#tour-menu h2 {
-  margin: 0 0 10px 0;
-  color: #8B0000;
-}
-
-#tour-menu .buttons button {
-  display: block;
-  width: 180px;
-  margin: 5px 0;
-  padding: 10px 0;
-  border: none;
-  border-radius: 12px;
-  background-color: #8B0000;
-  color: white;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.3s, transform 0.2s;
-}
-
-#tour-menu .buttons button:hover {
-  background-color: #b22222;
-  transform: scale(1.05);
-}
-
-/* 3D Scene */
-#scene-container {
-  width: 100vw;
-  height: calc(100vh - 60px);
-  background-color: #e0f7fa;
 }

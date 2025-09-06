@@ -1,84 +1,59 @@
-* {
-  margin: 0; padding: 0; box-sizing: border-box;
-  font-family: 'Poppins', sans-serif;
-}
-
 body, html {
-  height: 100%; width: 100%; overflow: hidden;
+  margin: 0;
+  padding: 0;
+  font-family: "SF Pro Display", "Segoe UI", sans-serif;
+  height: 100%;
   background: #000;
 }
 
-/* Header */
-header {
+.bg {
   position: fixed;
-  top: 0; width: 100%;
-  background: #7b1113;
-  color: white;
-  text-align: center;
-  padding: 15px 0;
-  font-size: 22px; font-weight: 600;
-  z-index: 1000;
-}
-
-/* Fullscreen sections */
-.screen {
-  position: absolute; top: 0; left: 0;
+  top: 0; left: 0;
   width: 100%; height: 100%;
-  background: url("assets/telkombuilding.png") center/cover no-repeat;
-  display: flex; justify-content: center; align-items: center;
-  text-align: center; padding: 20px;
-  transition: opacity 0.5s ease;
-}
-
-.overlay {
-  position: absolute; top: 0; left: 0;
-  width: 100%; height: 100%;
-  background: rgba(255,255,255,0.4);
+  object-fit: cover;
+  opacity: 0.4;
+  z-index: -1;
 }
 
 .content {
-  position: relative; z-index: 1; max-width: 75%;
-  color: #222;
+  max-width: 75%;
+  margin: auto;
+  text-align: center;
+  padding: 40px 20px;
+  background: rgba(255, 255, 255, 0.15); /* semi transparan */
+  backdrop-filter: blur(8px);             /* efek kaca */
+  border-radius: 20px;                    /* rounded */
+  box-shadow: 0 8px 25px rgba(0,0,0,0.3); /* shadow elegan */
 }
 
-.content h2 { font-size: 30px; margin-bottom: 15px; font-weight: 600; }
-.content p { font-size: 18px; margin-bottom: 25px; line-height: 1.6; }
-
-/* Buttons */
-button {
-  padding: 12px 20px;
-  font-size: 16px;
-  border: none; border-radius: 10px;
-  cursor: pointer; margin: 8px;
-  background: #7b1113; color: white;
-  transition: 0.3s ease;
-}
-button:hover { background: #a31c1e; }
-button.close { background: #444; }
-button.close:hover { background: #666; }
-
-.menu-buttons {
-  display: flex; flex-direction: column; gap: 10px;
-  margin-bottom: 20px;
+h1, h2 {
+  font-size: 2rem;
+  margin-bottom: 15px;
+  color: white;
 }
 
-/* Hidden Class */
-.hidden { display: none; }
-
-/* Scene Viewer */
-#scene-container {
-  position: absolute; top: 0; left: 0;
-  width: 100%; height: 100%;
-  background: #000;
+p {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: #f1f1f1;
 }
 
-/* Floating back button */
-#back-button {
-  position: fixed; top: 80px; right: 20px;
-  padding: 10px 15px;
-  background: #7b1113; color: white;
-  border: none; border-radius: 12px;
-  font-size: 14px; cursor: pointer;
-  z-index: 2000;
+.btn {
+  display: inline-block;
+  margin-top: 20px;
+  padding: 12px 30px;
+  background: linear-gradient(135deg, #ff4b2b, #ff416c); /* gradien modern */
+  color: white;
+  text-decoration: none;
+  border-radius: 50px;       /* rounded full */
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
 }
-#back-button:hover { background: #a31c1e; }
+
+.btn:hover {
+  transform: translateY(-3px) scale(1.03);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+}

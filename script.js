@@ -76,7 +76,7 @@ function cleanupModel(root){
 function loadModel(key){
   initThree(); showScreen('scene'); loadingEl.classList.remove('hidden');
   const map={
-    exterior:'assets/models/exterior.glb',
+    exterior:'https://drive.google.com/uc?export=download&id=1qKcLI61PORdAKXi7Lj_HnmHVR20Vh3Fu',
     ground:'assets/models/ground.glb',
     floor1:'assets/models/floor1.glb',
     floor2:'assets/models/floor2.glb',

@@ -9,13 +9,12 @@ document.addEventListener("DOMContentLoaded", () => {
   let scene, camera, renderer, controls, currentModel;
   const loader = new THREE.GLTFLoader();
 
-  // ----- Start Tour: tampilkan menu di tengah, background sama landing -----
+  // ----- Start Tour: tampilkan menu overlay -----
   startButton.addEventListener('click', () => {
-    tourMenu.style.display = 'block';
-    landing.style.display = 'flex'; // background tetap terlihat
+    tourMenu.style.display = 'flex'; // overlay + menu muncul
   });
 
-  // ----- Close Menu: balik ke landing page awal -----
+  // ----- Close Menu: balik ke landing -----
   closeMenuBtn.addEventListener('click', () => {
     tourMenu.style.display = 'none';
     landing.style.display = 'flex';
@@ -63,11 +62,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // ----- Load GLTF Model -----
   window.showModel = function(lantai) {
-    // Hapus model sebelumnya
     if (currentModel) {
       scene.remove(currentModel);
-      currentModel.traverse((child) => {
-        if (child.isMesh) {
+      currentModel.traverse((child)=>{
+        if(child.isMesh){
           child.geometry.dispose();
           child.material.dispose();
         }
@@ -75,43 +73,21 @@ document.addEventListener("DOMContentLoaded", () => {
       currentModel = null;
     }
 
-    // Tampilkan scene container 3D, sembunyikan landing & menu
     sceneContainer.style.display = 'block';
     landing.style.display = 'none';
     tourMenu.style.display = 'none';
 
     let path = '';
-    switch (lantai) {
-      case 'exterior': path = 'assets/models/exterior.glb'; break;
-      case 'ground': path = 'assets/models/ground.glb'; break;
-      case 'floor1': path = 'assets/models/floor1.glb'; break;
-      case 'floor2': path = 'assets/models/floor2.glb'; break;
-      case 'floor3': path = 'assets/models/floor3.glb'; break;
-      case 'rooftop': path = 'assets/models/rooftop.glb'; break;
+    switch(lantai){
+      case 'exterior': path='assets/models/exterior.glb'; break;
+      case 'ground': path='assets/models/ground.glb'; break;
+      case 'floor1': path='assets/models/floor1.glb'; break;
+      case 'floor2': path='assets/models/floor2.glb'; break;
+      case 'floor3': path='assets/models/floor3.glb'; break;
+      case 'rooftop': path='assets/models/rooftop.glb'; break;
       default: console.log('Model tidak tersedia'); return;
     }
 
     loader.load(
       path,
-      (gltf) => {
-        currentModel = gltf.scene;
-        scene.add(currentModel);
-        currentModel.position.set(0, 0, 0);
-        currentModel.scale.set(1, 1, 1);
-      },
-      undefined,
-      (error) => { console.error('Error load model:', error); }
-    );
-  };
-
-  // ----- Responsif -----
-  window.addEventListener('resize', () => {
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
-    renderer.setSize(window.innerWidth, window.innerHeight);
-  });
-
-  // ----- Initialize Three.js -----
-  initThree();
-
-});
+      (gltf)=>{ currentModel=gltf.scene; scene.add(currentModel); currentModel.position.set(0,0

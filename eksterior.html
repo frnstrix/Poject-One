@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tampak Luar Gedung</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://unpkg.com/three@0.156.1/build/three.min.js"></script>
+  <script src="https://unpkg.com/three@0.156.1/examples/js/controls/OrbitControls.js"></script>
+</head>
+<body>
+  <div id="scene-canvas"></div>
+
+  <div class="glass-card" style="position:fixed; top:16px; left:16px; z-index:10;">
+    <a href="index.html" class="btn btn-ghost">Kembali ke Menu</a>
+  </div>
+
+  <script src="photosphere.js"></script>
+  <script>
+    initThree();
+    loadPhotoSphere('assets/photos/exterior/PXL_20250906_031158762.PHOTOSPHERE.jpg');
+  </script>
+</body>
+</html>

@@ -1,4 +1,3 @@
-// Screens
 const screens = {
   landing: document.getElementById('landing'),
   menu: document.getElementById('menu'),
@@ -35,7 +34,10 @@ menuGrid.addEventListener('click',(e)=>{
 
   if(key==='exterior'){
     showScreen('scene');
-    loadPanoramaArray(exteriorPhotos);
+    loadPanorama([
+      'assets/photos/exterior/derelict_airfield_01_4k.hdr',
+      'assets/photos/exterior/plac_wolnosci_4k.hdr'
+    ]);
   } else {
     alert('Foto 360° belum tersedia untuk menu ini.');
   }
@@ -49,48 +51,41 @@ function addPress(el, fn){
 
 // Panorama
 let panoramaViewer = null;
-const exteriorPhotos = [
-  'assets/photos/exterior/derelict_airfield_01_4k.jpg',
-  'assets/photos/exterior/german_town_street_4k.jpg'
-];
-let currentIndex = 0;
+let panoIndex = 0;
+let panoImages = [];
 
-function loadPanoramaArray(arr){
-  if(arr.length===0) return;
-  currentIndex = 0;
-  loadPanorama(arr, currentIndex);
+function loadPanorama(images){
+  document.getElementById('scene-canvas').style.display='none';
+  const panoContainer = document.getElementById('panorama-container');
+  panoContainer.style.display='block';
+  panoImages = images;
+  panoIndex = 0;
+  loadCurrentPano();
 }
 
-function loadPanorama(arr, index){
-  const container = document.getElementById('panorama-container');
-  container.style.display='block';
-
+function loadCurrentPano(){
+  const panoContainer = document.getElementById('panorama-container');
   if(panoramaViewer){ panoramaViewer.destroy(); panoramaViewer=null; }
-
   panoramaViewer = pannellum.viewer('panorama-container', {
     type: 'equirectangular',
-    panorama: arr[index],
+    panorama: panoImages[panoIndex],
     autoLoad: true,
-    compass: false,
-    showControls: false
+    showControls: true
   });
-
-  // hapus panah sebelumnya
-  const oldArrows = container.querySelectorAll('.pano-arrow');
-  oldArrows.forEach(el=>el.remove());
-
-  // tambahkan panah in-image jika ada foto sebelumnya/selanjutnya
-  if(index>0) createArrowOverlay(container,'left', ()=>loadPanorama(arr,index-1));
-  if(index<arr.length-1) createArrowOverlay(container,'right', ()=>loadPanorama(arr,index+1));
 }
 
-function createArrowOverlay(container, direction, onClick){
-  const arrow = document.createElement('div');
-  arrow.className = 'pano-arrow ' + direction;
-  arrow.innerHTML = direction==='left' ? '&#9664;' : '&#9654;'; // ◄ ►
-  arrow.addEventListener('pointerup', onClick);
-  container.appendChild(arrow);
-}
+// Next/Prev in-image arrows (keyboard)
+document.addEventListener('keydown', (e)=>{
+  if(!panoramaViewer) return;
+  if(e.key==='ArrowRight'){
+    panoIndex = (panoIndex + 1) % panoImages.length;
+    loadCurrentPano();
+  }
+  if(e.key==='ArrowLeft'){
+    panoIndex = (panoIndex - 1 + panoImages.length) % panoImages.length;
+    loadCurrentPano();
+  }
+});
 
 // Init
 showScreen('landing');

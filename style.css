@@ -4,45 +4,78 @@ body {
   overflow: hidden;
 }
 
-#scene-container {
+/* Landing Page */
+#landing {
   width: 100vw;
   height: 100vh;
-  background-color: #e0f7fa;
+  background: url('assets/background.jpg') center/cover no-repeat;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
-/* UI Panel */
-#ui-panel {
+#landing-bar {
+  width: 100%;
+  background-color: rgba(0,0,0,0.6);
+  padding: 15px;
+  text-align: center;
+}
+
+#landing-bar h1 {
+  margin: 0;
+  color: red;
+  font-size: 32px;
+  font-weight: 600;
+}
+
+#landing-content {
+  margin-top: 50px;
+  text-align: center;
+  color: white;
+  max-width: 600px;
+}
+
+#landing-content p {
+  font-size: 18px;
+  margin-bottom: 30px;
+}
+
+#landing-content button {
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: 600;
+  color: white;
+  background-color: #00bcd4;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+#landing-content button:hover {
+  background-color: #0097a7;
+}
+
+/* Tour Menu */
+#tour-menu {
   position: absolute;
   top: 20px;
   left: 20px;
-  width: 180px;
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(255,255,255,0.9);
   padding: 15px;
   border-radius: 12px;
   box-shadow: 0 8px 20px rgba(0,0,0,0.25);
-  transition: transform 0.3s;
 }
 
-#ui-panel:hover {
-  transform: translateY(-5px);
-}
-
-#ui-panel h2 {
-  margin: 0 0 5px 0;
-  font-weight: 600;
-  font-size: 20px;
+#tour-menu h2 {
+  margin: 0 0 10px 0;
   color: #00796b;
 }
 
-#ui-panel p {
-  margin: 0 0 10px 0;
-  font-size: 14px;
-  color: #004d40;
-}
-
-#ui-panel .buttons button {
+#tour-menu .buttons button {
   display: block;
-  width: 100%;
+  width: 180px;
   margin: 5px 0;
   padding: 10px 0;
   border: none;
@@ -54,7 +87,14 @@ body {
   transition: background 0.3s, transform 0.2s;
 }
 
-#ui-panel .buttons button:hover {
+#tour-menu .buttons button:hover {
   background-color: #0097a7;
   transform: scale(1.05);
+}
+
+/* 3D Scene */
+#scene-container {
+  width: 100vw;
+  height: 100vh;
+  background-color: #e0f7fa;
 }

@@ -25,6 +25,7 @@ addPress(btnBack, ()=>{
   showScreen('menu');
   document.getElementById('panorama-container').style.display='none';
   if(panoramaViewer){ panoramaViewer.destroy(); panoramaViewer=null; }
+  removeArrows();
 });
 
 menuGrid.addEventListener('click',(e)=>{
@@ -35,8 +36,8 @@ menuGrid.addEventListener('click',(e)=>{
   if(key==='exterior'){
     showScreen('scene');
     loadPanorama([
-      'assets/photos/exterior/derelict_airfield_01_4k.hdr',
-      'assets/photos/exterior/plac_wolnosci_4k.hdr'
+      'assets/photos/exterior/german_town_street_4k.jpg',
+      'assets/photos/exterior/derelict_airfield_01_4k.jpg'
     ]);
   } else {
     alert('Foto 360° belum tersedia untuk menu ini.');
@@ -55,9 +56,7 @@ let panoIndex = 0;
 let panoImages = [];
 
 function loadPanorama(images){
-  document.getElementById('scene-canvas').style.display='none';
-  const panoContainer = document.getElementById('panorama-container');
-  panoContainer.style.display='block';
+  document.getElementById('panorama-container').style.display='block';
   panoImages = images;
   panoIndex = 0;
   loadCurrentPano();
@@ -72,20 +71,33 @@ function loadCurrentPano(){
     autoLoad: true,
     showControls: true
   });
+  addArrows();
 }
 
-// Next/Prev in-image arrows (keyboard)
-document.addEventListener('keydown', (e)=>{
-  if(!panoramaViewer) return;
-  if(e.key==='ArrowRight'){
-    panoIndex = (panoIndex + 1) % panoImages.length;
-    loadCurrentPano();
-  }
-  if(e.key==='ArrowLeft'){
-    panoIndex = (panoIndex - 1 + panoImages.length) % panoImages.length;
-    loadCurrentPano();
-  }
-});
+// Panah in-image
+function addArrows(){
+  removeArrows();
+  const container = document.getElementById('panorama-container');
+  const next = document.createElement('div');
+  next.className = 'pano-arrow';
+  next.style.right = '20px';
+  next.style.top = '50%';
+  next.innerHTML = '→';
+  next.onclick = ()=>{ panoIndex = (panoIndex+1) % panoImages.length; loadCurrentPano();}
+  container.appendChild(next);
+
+  const prev = document.createElement('div');
+  prev.className = 'pano-arrow';
+  prev.style.left = '20px';
+  prev.style.top = '50%';
+  prev.innerHTML = '←';
+  prev.onclick = ()=>{ panoIndex = (panoIndex-1+panoImages.length) % panoImages.length; loadCurrentPano();}
+  container.appendChild(prev);
+}
+
+function removeArrows(){
+  document.querySelectorAll('.pano-arrow').forEach(el=>el.remove());
+}
 
 // Init
 showScreen('landing');

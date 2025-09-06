@@ -13,7 +13,6 @@ startButton.addEventListener('click', () => {
 
 // ===== Three.js Setup =====
 let scene, camera, renderer, controls;
-const models = {};
 
 function initScene() {
   scene = new THREE.Scene();
@@ -34,7 +33,7 @@ function initScene() {
   // Controls
   controls = new THREE.OrbitControls(camera, renderer.domElement);
 
-  // Placeholder model
+  // Placeholder cube
   const geometry = new THREE.BoxGeometry(1,1,1);
   const material = new THREE.MeshStandardMaterial({ color: 0xff0000 });
   const cube = new THREE.Mesh(geometry, material);
@@ -53,7 +52,7 @@ function animate() {
 // ===== Model switching (placeholder) =====
 function showModel(modelName){
   console.log("Load model:", modelName);
-  // nanti di sini load GLB / ganti model sesuai pilihan
+  // nanti load GLB sesuai model pilihan
 }
 
 // Resize

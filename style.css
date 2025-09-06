@@ -1,0 +1,42 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  overflow: hidden;
+}
+
+#scene-container {
+  width: 100vw;
+  height: 100vh;
+  background-color: #bfd1e5;
+}
+
+/* UI Panel */
+#ui-panel {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background-color: rgba(255,255,255,0.9);
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.3);
+}
+
+#ui-panel h2 {
+  margin: 0 0 10px 0;
+  font-size: 18px;
+}
+
+#ui-panel .buttons button {
+  margin: 5px 5px 0 0;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 5px;
+  background-color: #00bcd4;
+  color: white;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+#ui-panel .buttons button:hover {
+  background-color: #0097a7;
+}

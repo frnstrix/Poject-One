@@ -1,6 +1,6 @@
-/* Reset */
+/* Reset & font global */
 * { margin:0; padding:0; box-sizing:border-box; }
-body, html { width:100%; height:100%; font-family:'Roboto', sans-serif; }
+body, html { width:100%; height:100%; font-family:'SF Pro Display', 'Montserrat', 'Roboto', sans-serif; }
 
 /* Top Bar */
 #top-bar {
@@ -21,7 +21,7 @@ body, html { width:100%; height:100%; font-family:'Roboto', sans-serif; }
   background-size:cover; filter:blur(3px); opacity:0.4; z-index:1;
 }
 .landing-content {
-  position:relative; z-index:2; width:90%; max-width:700px; text-align:center;
+  position:relative; z-index:2; width:100%; display:flex; justify-content:center; align-items:center;
 }
 
 /* Deskripsi Card */
@@ -29,9 +29,12 @@ body, html { width:100%; height:100%; font-family:'Roboto', sans-serif; }
   background: rgba(255,255,255,0.25); backdrop-filter:blur(12px);
   padding:30px; border-radius:25px; box-shadow:0 15px 30px rgba(0,0,0,0.3);
   color:#111; animation:fadeInUp 1s ease forwards;
+  max-width:75%; /* Deskripsi 75% lebar */
+  text-align:center;
 }
-.desc-card h1 { color:#8B0000; font-size:30px; margin-bottom:15px; font-weight:700; }
+.desc-card h1 { color:#8B0000; font-size:32px; margin-bottom:15px; font-weight:700; }
 .desc-card p { font-size:18px; line-height:1.6; margin-bottom:25px; }
+.button-wrapper { display:flex; justify-content:center; }
 .desc-card button {
   padding:15px 40px; font-size:18px; border:none; border-radius:50px;
   background:linear-gradient(135deg,#ff5252,#ff1744); color:white; cursor:pointer;
@@ -41,20 +44,22 @@ body, html { width:100%; height:100%; font-family:'Roboto', sans-serif; }
 
 /* Tour Menu */
 #tour-menu {
-  position:absolute; top:80px; left:50%; transform:translateX(-50%);
+  position:fixed; top:50%; left:50%; transform:translate(-50%, -50%);
   background: rgba(255,255,255,0.25); backdrop-filter:blur(12px);
   padding:25px 20px; border-radius:25px; box-shadow:0 15px 30px rgba(0,0,0,0.3);
-  display:none; z-index:5; max-width:340px; width:90%; text-align:center;
+  display:none; z-index:100; max-width:340px; width:90%; text-align:center;
 }
-#tour-menu h2 { margin-bottom:20px; color:#8B0000; font-size:22px; font-weight:700; }
+#tour-menu h2 { margin-bottom:20px; color:#8B0000; font-size:22px; font-weight:700; font-family:'SF Pro Display', 'Montserrat', 'Roboto', sans-serif; }
 #tour-menu .buttons button {
   display:block; width:100%; margin:10px 0; padding:12px 0; border:none; border-radius:20px;
   background:#8B0000; color:white; font-weight:600; cursor:pointer; transition:all 0.3s ease;
+  font-family:'SF Pro Display', 'Montserrat', 'Roboto', sans-serif;
 }
 #tour-menu .buttons button:hover { background:#b22222; transform:scale(1.05); }
 #close-menu {
   margin-top:15px; padding:12px 0; width:100%; border-radius:20px;
   background:#444; color:white; font-weight:600; cursor:pointer; transition:all 0.3s ease;
+  font-family:'SF Pro Display', 'Montserrat', 'Roboto', sans-serif;
 }
 #close-menu:hover { background:#666; transform:scale(1.03); }
 
@@ -66,11 +71,11 @@ body, html { width:100%; height:100%; font-family:'Roboto', sans-serif; }
 
 /* Responsif */
 @media screen and (max-width:600px){
-  .desc-card { padding:20px; }
+  .desc-card { padding:20px; max-width:90%; }
   .desc-card h1 { font-size:24px; }
   .desc-card p { font-size:15px; }
   .desc-card button { padding:12px 30px; font-size:16px; }
-  #tour-menu { padding:20px; }
+  #tour-menu { padding:20px; max-width:90%; }
   #tour-menu h2 { font-size:20px; }
   #tour-menu .buttons button { padding:10px 0; font-size:14px; }
   #close-menu { padding:8px 0; font-size:14px; }

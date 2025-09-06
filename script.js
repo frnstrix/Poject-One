@@ -1,33 +1,43 @@
-const screens = {
-  landing: document.getElementById('landing'),
-  menu: document.getElementById('menu')
-};
-const bg = document.querySelector('.bg');
+function loadExteriorPhotoSphere() {
+    initThree();  // pastikan scene Three.js sudah siap
+    showScreen('scene');  // tampilkan canvas scene
 
-function showScreen(name){
-  Object.entries(screens).forEach(([key, el])=>{
-    el.classList.toggle('is-active', key===name);
-  });
-  bg.style.opacity = (name==='menu' || name==='landing')?'1':'0';
+    const url = 'https://drive.google.com/uc?export=view&id=1kc3p6VXO64BrQkefu9ivENQSplOgWlLN';
+
+    const geometry = new THREE.SphereGeometry(500, 60, 40);
+    geometry.scale(-1,1,1);  // balik ke dalam sphere
+
+    const loader = new THREE.TextureLoader();
+    loader.load(
+        url,
+        function(texture) {
+            const material = new THREE.MeshBasicMaterial({ map: texture });
+            const sphere = new THREE.Mesh(geometry, material);
+
+            // Hapus model lama jika ada
+            if(currentModel) { cleanupModel(currentModel); scene.remove(currentModel); currentModel=null; }
+
+            currentModel = sphere;
+            scene.add(sphere);
+
+            camera.position.set(0,0,0.1);  // posisi kamera di tengah sphere
+            controls.target.set(0,0,0);
+            controls.update();
+        },
+        undefined,
+        function(err){ console.error('Gagal load photo sphere:', err); }
+    );
 }
 
-// Buttons
-const btnStart = document.getElementById('btn-start');
-const btnCloseMenu = document.getElementById('btn-close-menu');
-const menuGrid = document.querySelector('.menu-grid');
-
-btnStart.addEventListener('click', ()=>showScreen('menu'));
-btnCloseMenu.addEventListener('click', ()=>showScreen('landing'));
-
-// Pilih tampilan → buka halaman photo sphere
+// Ganti event klik menu tampak luar gedung
 menuGrid.addEventListener('click',(e)=>{
-  const btn = e.target.closest('button[data-folder]');
-  if(!btn) return;
-  const folder = btn.getAttribute('data-folder');
-  // Untuk percobaan, baru satu foto: exterior
-  if(folder==='exterior'){
-    window.location.href = 'eksterior.html';
-  } else {
-    alert('Belum ada foto untuk menu ini.');
-  }
+    const btn = e.target.closest('button[data-model]');
+    if(!btn) return;
+    const modelKey = btn.getAttribute('data-model');
+
+    if(modelKey==='exterior'){
+        loadExteriorPhotoSphere();
+    } else {
+        loadModel(modelKey);  // tetap pakai GLB untuk lantai lain (sementara)
+    }
 });

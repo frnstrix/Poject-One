@@ -1,3 +1,4 @@
+// --- Screens & Background ---
 const screens = {
   landing: document.getElementById('landing'),
   menu: document.getElementById('menu'),
@@ -7,14 +8,9 @@ const bg = document.getElementById('bg');
 const loadingEl = document.getElementById('loading');
 const canvasWrap = document.getElementById('scene-canvas');
 const btnBack = document.getElementById('btn-back');
-const btnNext = document.getElementById('btn-next');
-const btnPrev = document.getElementById('btn-prev');
-
-let scene, camera, renderer, controls;
-let sphere = null;
-let currentFolder = '';
-let photos = [];
-let currentIndex = 0;
+const menuGrid = document.querySelector('.menu-grid');
+const btnStart = document.getElementById('btn-start');
+const btnCloseMenu = document.getElementById('btn-close-menu');
 
 function showScreen(name){
   Object.entries(screens).forEach(([key, el])=>{
@@ -24,49 +20,40 @@ function showScreen(name){
   bg.style.pointerEvents = (name==='scene')?'none':'auto';
 }
 
-// Buttons
-const btnStart = document.getElementById('btn-start');
-const btnCloseMenu = document.getElementById('btn-close-menu');
-const menuGrid = document.querySelector('.menu-grid');
+// --- Button Actions ---
+function addPress(el, fn){
+  el.addEventListener('pointerup', e=>{ e.preventDefault(); fn(); }, {passive:false});
+}
+
 addPress(btnStart, ()=>showScreen('menu'));
 addPress(btnCloseMenu, ()=>showScreen('landing'));
-
-menuGrid.addEventListener('click',(e)=>{
-  const btn = e.target.closest('button[data-model]');
-  if(!btn) return;
-  loadFolderPhotos(btn.getAttribute('data-model'));
-});
-
 addPress(btnBack, ()=>{
   showScreen('menu');
   cleanupSphere();
 });
-addPress(btnNext, ()=>nextPhoto());
-addPress(btnPrev, ()=>prevPhoto());
 
-function addPress(el,fn){
-  el.addEventListener('pointerup', e=>{ e.preventDefault(); fn(); }, {passive:false});
-}
+// --- PhotoSphere ---
+let scene, camera, renderer, controls, sphere=null;
+let currentFolder='', photos=[], currentIndex=0;
 
-// --- Three.js Init ---
 function initThree(){
   if(renderer) return;
   scene = new THREE.Scene();
-  scene.background = new THREE.Color(0x0d0d0d);
-  camera = new THREE.PerspectiveCamera(60, window.innerWidth/window.innerHeight, 0.1, 2000);
-  camera.position.set(0,0,0.1);
-  renderer = new THREE.WebGLRenderer({antialias:true, alpha:false});
+  scene.background = new THREE.Color(0x000000);
+  camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 2000);
+  camera.position.set(0,0,0.01);
+
+  renderer = new THREE.WebGLRenderer({antialias:true});
   renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
   renderer.setSize(window.innerWidth, window.innerHeight);
   canvasWrap.appendChild(renderer.domElement);
 
   controls = new THREE.OrbitControls(camera, renderer.domElement);
-  controls.enableDamping = true; controls.dampingFactor = 0.08;
+  controls.enableDamping = true;
+  controls.dampingFactor = 0.08;
   controls.enablePan = false;
-
-  scene.add(new THREE.AmbientLight(0xffffff,0.7));
-  const dir = new THREE.DirectionalLight(0xffffff,0.9);
-  dir.position.set(8,16,8); scene.add(dir);
+  controls.rotateSpeed = 0.4;
+  controls.zoomSpeed = 0.6;
 
   animate();
 }
@@ -84,7 +71,7 @@ window.addEventListener('resize', ()=>{
   renderer.setSize(window.innerWidth, window.innerHeight);
 });
 
-// --- Sphere Photo ---
+// --- PhotoSphere Functions ---
 function cleanupSphere(){
   if(sphere){
     scene.remove(sphere);
@@ -98,8 +85,10 @@ function loadFolderPhotos(folderName){
   currentFolder = folderName;
   currentIndex = 0;
   photos = [];
-  // Sementara manual 1 foto dulu
-  photos.push(`assets/photos/${folderName}/PXL_20250906_031158762.PHOTOSPHERE.jpg`);
+  if(folderName==='exterior'){
+    photos.push('assets/photos/exterior/PXL_20250906_031158762.PHOTOSPHERE.jpg');
+  }
+  // nanti bisa tambah otomatis scan folder
   showScreen('scene');
   loadCurrentPhoto();
 }
@@ -115,11 +104,11 @@ function loadCurrentPhoto(){
     texture=>{
       loadingEl.classList.add('hidden');
       const geometry = new THREE.SphereGeometry(500,64,64);
-      geometry.scale(-1,1,1);
+      geometry.scale(-1,1,1); // Tekstur di dalam sphere
       const material = new THREE.MeshBasicMaterial({map:texture});
       sphere = new THREE.Mesh(geometry, material);
       scene.add(sphere);
-      camera.position.set(0,0,0.1);
+      camera.position.set(0,0,0.01);
       controls.target.set(0,0,0);
       controls.update();
     },
@@ -131,21 +120,11 @@ function loadCurrentPhoto(){
   );
 }
 
-function nextPhoto(){
-  if(!photos.length) return;
-  currentIndex = (currentIndex+1)%photos.length;
-  loadCurrentPhoto();
-}
-function prevPhoto(){
-  if(!photos.length) return;
-  currentIndex = (currentIndex-1+photos.length)%photos.length;
-  loadCurrentPhoto();
-}
-
-// Arrow keys support
-document.addEventListener('keydown', e=>{
-  if(e.key==='ArrowRight') nextPhoto();
-  if(e.key==='ArrowLeft') prevPhoto();
+// Menu klik photo
+menuGrid.addEventListener('click',(e)=>{
+  const btn = e.target.closest('button[data-model]');
+  if(!btn) return;
+  loadFolderPhotos(btn.getAttribute('data-model'));
 });
 
 // Init Landing

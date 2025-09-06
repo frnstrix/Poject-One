@@ -9,19 +9,20 @@ document.addEventListener("DOMContentLoaded", () => {
   let scene, camera, renderer, controls, currentModel;
   const loader = new THREE.GLTFLoader();
 
-  // ----- Start Tour -----
+  // ----- Start Tour: tampilkan menu di tengah, background sama landing -----
   startButton.addEventListener('click', () => {
     tourMenu.style.display = 'block';
-    landing.style.display = 'flex';
+    landing.style.display = 'flex'; // background tetap terlihat
   });
 
-  // ----- Close Menu -----
+  // ----- Close Menu: balik ke landing page awal -----
   closeMenuBtn.addEventListener('click', () => {
     tourMenu.style.display = 'none';
     landing.style.display = 'flex';
+    sceneContainer.style.display = 'none';
   });
 
-  // ----- Init Three.js -----
+  // ----- Inisialisasi Three.js -----
   function initThree() {
     scene = new THREE.Scene();
     scene.background = new THREE.Color(0xf0f0f0);
@@ -62,6 +63,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // ----- Load GLTF Model -----
   window.showModel = function(lantai) {
+    // Hapus model sebelumnya
     if (currentModel) {
       scene.remove(currentModel);
       currentModel.traverse((child) => {
@@ -73,6 +75,7 @@ document.addEventListener("DOMContentLoaded", () => {
       currentModel = null;
     }
 
+    // Tampilkan scene container 3D, sembunyikan landing & menu
     sceneContainer.style.display = 'block';
     landing.style.display = 'none';
     tourMenu.style.display = 'none';
@@ -94,19 +97,21 @@ document.addEventListener("DOMContentLoaded", () => {
         currentModel = gltf.scene;
         scene.add(currentModel);
         currentModel.position.set(0, 0, 0);
-        currentModel.scale.set(1,1,1);
+        currentModel.scale.set(1, 1, 1);
       },
       undefined,
       (error) => { console.error('Error load model:', error); }
     );
   };
 
+  // ----- Responsif -----
   window.addEventListener('resize', () => {
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
     renderer.setSize(window.innerWidth, window.innerHeight);
   });
 
+  // ----- Initialize Three.js -----
   initThree();
 
 });

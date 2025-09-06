@@ -1,44 +1,66 @@
-// === Basic Three.js Setup ===
-const scene = new THREE.Scene();
-scene.background = new THREE.Color(0xbfd1e5);
+// ===== Landing Page "Mulai Tur" =====
+const startButton = document.getElementById('start-tour');
+const landing = document.getElementById('landing');
+const sceneContainer = document.getElementById('scene-container');
+const tourMenu = document.getElementById('tour-menu');
 
-const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
-camera.position.set(0, 2, 5);
+startButton.addEventListener('click', () => {
+  landing.style.display = 'none';
+  sceneContainer.style.display = 'block';
+  tourMenu.style.display = 'block';
+  initScene(); // mulai Three.js scene
+});
 
-const renderer = new THREE.WebGLRenderer({ antialias: true });
-renderer.setSize(window.innerWidth, window.innerHeight);
-document.getElementById('scene-container').appendChild(renderer.domElement);
+// ===== Three.js Setup =====
+let scene, camera, renderer, controls;
+const models = {};
 
-// Lighting
-const light = new THREE.DirectionalLight(0xffffff, 1);
-light.position.set(5,10,5);
-scene.add(light);
+function initScene() {
+  scene = new THREE.Scene();
+  scene.background = new THREE.Color(0xbfd1e5);
 
-// Controls
-const controls = new THREE.OrbitControls(camera, renderer.domElement);
+  camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
+  camera.position.set(0,2,5);
 
-// Placeholder: simple cube (sementara, nanti diganti model Blender)
-const geometry = new THREE.BoxGeometry(1,1,1);
-const material = new THREE.MeshStandardMaterial({ color: 0xff0000 });
-const cube = new THREE.Mesh(geometry, material);
-scene.add(cube);
+  renderer = new THREE.WebGLRenderer({ antialias: true });
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  sceneContainer.appendChild(renderer.domElement);
 
-// Render loop
+  // Lighting
+  const light = new THREE.DirectionalLight(0xffffff, 1);
+  light.position.set(5,10,5);
+  scene.add(light);
+
+  // Controls
+  controls = new THREE.OrbitControls(camera, renderer.domElement);
+
+  // Placeholder model
+  const geometry = new THREE.BoxGeometry(1,1,1);
+  const material = new THREE.MeshStandardMaterial({ color: 0xff0000 });
+  const cube = new THREE.Mesh(geometry, material);
+  scene.add(cube);
+
+  animate();
+}
+
+// Render Loop
 function animate() {
   requestAnimationFrame(animate);
-  controls.update();
-  renderer.render(scene, camera);
-}
-animate();
-
-// ===== Floor functions (sementara log) =====
-function showFloor(floorName){
-  console.log("Pindah ke:", floorName);
+  if(controls) controls.update();
+  if(renderer && scene && camera) renderer.render(scene, camera);
 }
 
-// Resize responsif
+// ===== Model switching (placeholder) =====
+function showModel(modelName){
+  console.log("Load model:", modelName);
+  // nanti di sini load GLB / ganti model sesuai pilihan
+}
+
+// Resize
 window.addEventListener('resize', () => {
-  camera.aspect = window.innerWidth/window.innerHeight;
-  camera.updateProjectionMatrix();
-  renderer.setSize(window.innerWidth, window.innerHeight);
+  if(camera && renderer){
+    camera.aspect = window.innerWidth/window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+  }
 });

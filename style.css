@@ -131,3 +131,11 @@ body{
 /* Pop animation */
 .anim-pop{animation:pop .45s ease both}
 @keyframes pop{from{opacity:0; transform:translateY(8px) scale(.98)} to{opacity:1; transform:translateY(0) scale(1)}}
+
+/* Landing text color */
+#landing .glass-card h1,
+#landing .glass-card h2,
+#landing .glass-card p {
+    color: #8B0000; /* Merah tua */
+}
+

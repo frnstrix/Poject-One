@@ -1,81 +1,54 @@
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Virtual TUS</title>
-
-  <!-- Google Fonts modern & elegan -->
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-
-<!-- CSS -->
-<link rel="stylesheet" href="style.css">
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Virtual TUS</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 </head>
 <body>
+  <!-- Header -->
+  <header>
+    Virtual TUS
+  </header>
 
-  <!-- Top Bar -->
-  <!-- Header / Top Bar -->
-<header id="top-bar">
-<h1>Virtual TUS</h1>
-</header>
-
-  <!-- Landing Section -->
   <!-- Landing Page -->
-<main id="landing">
-<div class="overlay"></div>
-    <div id="building-container">
-      <div id="building-desc">
-        <div class="desc-card">
-          <h2>Selamat Datang di Virtual TUS!</h2>
-          <p>
-            Kampus Telkom Surabaya adalah pusat pendidikan teknologi informasi dan komunikasi yang modern dan inovatif,  
-            menjadi tempat bagi mahasiswa mengembangkan kreativitas, kompetensi digital, dan kemampuan leadership.  
-            Fasilitas canggih tersedia mulai dari laboratorium TI, ruang kelas interaktif, coworking space, hingga area riset dan inovasi.  
-            Lingkungan kampus yang inspiratif mendorong kolaborasi antar mahasiswa, dosen, dan industri teknologi.  
-            Dengan virtual tour ini, Anda bisa menjelajahi setiap sudut gedung mulai dari tampak luar, lantai dasar, hingga rooftop,  
-            merasakan suasana belajar dan bekerja di kampus teknologi terkemuka tanpa hadir secara fisik.
-          </p>
-          <button id="start-tour">Mulai Tur</button>
-        </div>
-    <section id="landing-content">
-      <div class="desc-card">
-        <h2>Selamat Datang di Virtual TUS!</h2>
-        <p>
-          Kampus Telkom Surabaya adalah pusat pendidikan teknologi informasi dan komunikasi yang modern dan inovatif,  
-          menjadi tempat bagi mahasiswa mengembangkan kreativitas, kompetensi digital, dan kemampuan leadership.  
-          Fasilitas canggih tersedia mulai dari laboratorium TI, ruang kelas interaktif, coworking space, hingga area riset dan inovasi.  
-          Lingkungan kampus yang inspiratif mendorong kolaborasi antar mahasiswa, dosen, dan industri teknologi.  
-          Dengan virtual tour ini, Anda bisa menjelajahi setiap sudut gedung mulai dari tampak luar, lantai dasar, hingga rooftop,  
-          merasakan suasana belajar dan bekerja di kampus teknologi terkemuka tanpa hadir secara fisik.
-        </p>
-        <button id="start-tour">Mulai Tur</button>
-</div>
+  <section id="landing" class="screen">
+    <div class="overlay"></div>
+    <div class="content">
+      <h2>Selamat Datang di Virtual Tour</h2>
+      <p>Telkom University Surabaya menghadirkan kampus modern dengan fasilitas lengkap, 
+      lingkungan akademik yang mendukung kreativitas, dan suasana belajar yang nyaman. 
+      Mari jelajahi setiap sudut kampus melalui tur virtual ini!</p>
+      <button id="start-tour">Mulai Tur</button>
     </div>
-    </section>
-</main>
+  </section>
 
-<!-- Tour Menu -->
-<aside id="tour-menu">
-    <h2>Pilih Tampilan:</h2>
-    <h2>Pilih Tampilan</h2>
-<div class="buttons">
-<button onclick="showModel('exterior')">Tampak Luar Gedung</button>
-<button onclick="showModel('ground')">Lantai Dasar</button>
-@@ -54,14 +52,14 @@ <h2>Pilih Tampilan:</h2>
-</aside>
+  <!-- Menu Pilih Tampilan -->
+  <section id="tour-menu" class="screen hidden">
+    <div class="overlay"></div>
+    <div class="content">
+      <h2>Pilih Tampilan</h2>
+      <div class="menu-buttons">
+        <button onclick="showModel('exterior')">Tampak Luar Gedung</button>
+        <button onclick="showModel('ground')">Lantai Dasar</button>
+        <button onclick="showModel('floor1')">Lantai 1</button>
+        <button onclick="showModel('floor2')">Lantai 2</button>
+        <button onclick="showModel('floor3')">Lantai 3</button>
+        <button onclick="showModel('rooftop')">Rooftop</button>
+      </div>
+      <button class="close" id="close-menu">Tutup Menu</button>
+    </div>
+  </section>
 
-<!-- 3D Scene -->
-  <div id="scene-container" style="display:none;"></div>
-  <div id="scene-container"></div>
+  <!-- 3D Viewer -->
+  <section id="scene-container" class="hidden"></section>
+  <button id="back-button" class="hidden">Kembali</button>
 
-  <!-- Three.js Libraries -->
-  <!-- Three.js -->
-<script src="https://cdn.jsdelivr.net/npm/three@0.156.1/build/three.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/three@0.156.1/examples/js/loaders/GLTFLoader.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/three@0.156.1/examples/js/controls/OrbitControls.js"></script>
-
-  <!-- Main Script -->
-  <!-- JS -->
-<script src="script.js"></script>
-
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128/examples/js/controls/OrbitControls.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128/examples/js/loaders/GLTFLoader.js"></script>
+  <script src="script.js"></script>
 </body>
+</html>

@@ -90,4 +90,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
     loader.load(
       path,
-      (gltf)=>{ currentModel=gltf.scene; scene.add(currentModel); currentModel.position.set(0,0
+      (gltf)=>{ currentModel=gltf.scene; scene.add(currentModel); currentModel.position.set(0,0,0); currentModel.scale.set(1,1,1); },
+      undefined,
+      (err)=>{ console.error('Error load model:',err); }
+    );
+  };
+
+  window.addEventListener('resize', ()=>{
+    camera.aspect = window.innerWidth/window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+  });
+
+  initThree();
+});
